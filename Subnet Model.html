@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="Dawei Zhu">
+	<title>Subnet Example</title>
+</head>
+<style>
+    * {
+        /* padding: 0; */
+        /* margin: 0; */
+    }
+	html{
+		font-family: 'Courier New', Courier, monospace;
+	}
+	#ipv4{
+		/* font-size: 0px;text-align: center; */
+	}
+	#ipv4 span{
+		font-size: 24px;
+		display: inline-block;
+	}
+	.subnet_class_bits {
+		color:burlywood;
+		font-weight: lighter;
+		background-color:darkmagenta;
+	}
+	.subnet_bits {
+		color: red;
+		background-color: lightgreen;
+	}
+	.host_bits {
+		color: blueviolet;
+		font-weight: bold;
+		background-color: gold;
+	}
+	#subnet_mask{
+		font-size: 24px;
+
+	}
+</style>
+<body>
+	<div id = "container">
+		<h1>Subnet Example</h1>
+		<div id="example">
+			<div id="help">
+				<h2>Help</h2>
+				You may use <u>keyboard shortcuts</u> to move these boundaries:<br />
+				<strong>&lArr;</strong>: move custom subnet boundary left;<br />
+				<strong>&rArr;</strong>: move custom subnet boundary right;<br />
+				<strong>Q</strong>: move provided subnet boundary left ;<br />
+				<strong>D</strong>: move custom subnet boundary right;<br />
+				By Dawei Zhu
+			</div>
+			<h2>IP</h2>
+			<div id="ipv4">
+				<div id="ip_dec">
+					<span>In dec: </span>
+					<br />
+					<span class="octet"></span>
+					<span class="ip_seperator">.</span>
+
+					<span class="octet"></span>
+					<span class="ip_seperator">.</span>
+
+					<span class="octet"></span>
+					<span class="ip_seperator">.</span>
+
+					<span class="octet"></span>
+					<span class="slashed_mask"></span> 
+				</div>
+				<div id="ip_bin">
+					<span>In bin: </span>
+					<br />
+					<span class="octet subnet_class_bits"></span>
+
+					<span class="octet subnet_bits"></span>
+
+					<span class="octet host_bits"></span>
+
+					<span class="slashed_mask"></span>
+
+				</div>
+				<div id='dashboard'>
+					<div id="info">
+						<h2>Subnet Info</h2>
+						<div id="subnet_mask">
+							<div id="mask_dec"><span></span><span class="slashed_mask"></span></div>
+							<div id="mask_bin"><span></span><span class="slashed_mask"></span></div>
+							
+						</div>
+						
+					</div>
+					<menu>
+						<div>
+							<label for="subnet_type"></label>
+							<input type="button" name="subnet_type" value="Subnet &lt;" onclick="subnet_boundary_shift_left();draw()">
+							<input type="button" name="subnet_type" value="Subnet &gt;" onclick="subnet_boundary_shift_right();draw()">
+						</div>
+						<div>
+							<label for="subnet_type"></label>
+							<input type="button" name="subnet_type" value="Provider subnet &lt;" onclick="provided_boundary_shift_left();draw()">
+							<input type="button" name="subnet_type" value="Provider subnet &gt;" onclick="provided_boundary_shift_right();draw()">
+						</div>
+					</menu>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</body>
+
+<script type="text/javascript">
+	const IP_OCTET_QTY = 4,
+	IP_BEGIN_INDEX = 0,
+	IP_MAX_BITS = 32,
+	OCTET_BITS = 8,
+	LEAST_SUBNET_BITS = 2
+
+	var ip_octets = generate_ip(),
+		ip_bin = convert_to_8bits_bin(ip_octets),
+		subnet_class_bit_number = 16,
+		subnet_bit_number = 8,
+		host_bit_number = 8,
+		subnet_mask_decimal = [];
+
+	var Ip = {
+		dec: [],
+		bin: "",
+		subnet_mask: "",
+		class_bits_qty: 16,
+		subnet_bit_qty: 8,
+		host_bit_qty: 8,
+		__initialise__: function (){
+			this.dec = generate_ip()
+			this.bin = convert_to_8bits_bin(this.dec)
+			this.subnet_mask = this.convert_subnet_mask()
+		},
+		subnet_boundary_shift_left: function () {
+			if (this.subnet_bit_qty > 0){
+				this.subnet_bit_qty --
+				this.host_bit_qty ++
+			}
+		},
+		subnet_boundary_shift_right: function () {
+			if (this.host_bit_number> LEAST_SUBNET_BITS){
+				this.subnet_bit_qty ++
+				this.host_bit_qty --
+			}
+		},
+		to_the_most_left_subnet_boundary: function(){
+			while(this.subnet_bit_qty > 0) {
+				subnet_boundary_shift_left()
+			}
+		},
+		to_the_most_right_subnet_boundary: function(){
+			while(this.subnet_bit_qty > LEAST_SUBNET_BITS){
+				subnet_boundary_shift_right()
+			}
+		},
+		convert_subnet_mask: function () {
+			let subnet_mask ='0'.repeat(this.host_bit_qty).padStart(32,'1')
+			let subnet_mask_octets = []
+			for (let i = 0; i < IP_MAX_BITS/OCTET_BITS; i++){
+				subnet_mask_octets.push(subnet_mask.slice(
+					OCTET_BITS * i, 
+					OCTET_BITS * i + OCTET_BITS)
+				)
+			}
+			return (subnet_mask_octets).join('.')
+		},
+		// draw: function () {
+			
+		// }
+	}
+
+	draw()
+
+	document.addEventListener('keydown', 
+		(event)=>{
+			var keyname = event.key,
+			keycode = event.code
+			console.log(keyname)
+			event.preventDefault()
+			// Single key
+			if (keyname == 'ArrowLeft'){
+				subnet_boundary_shift_left()
+				// Ip.subnet_boundary_shift_left()
+				// console.log(Ip.subnet_bit_qty)
+			}
+			if (keyname == 'ArrowRight'){
+				subnet_boundary_shift_right()
+				// Ip.subnet_boundary_shift_right()
+				// console.log(Ip.subnet_bit_qty)
+			}
+			if (keyname == 'a'){
+				provided_boundary_shift_left()
+			}
+			if (keyname == 'd'){
+				provided_boundary_shift_right()
+			}
+			// Ctrl + ArrLeft
+			if ((event.ctrlKey || event.metaKey) && event.key === 'ArrowLeft') {
+				to_the_most_left_subnet_boundary()
+			}
+
+			if ((event.ctrlKey || event.metaKey) && event.key === 'ArrowRight') {
+				to_the_most_right_subnet_boundary()
+			}
+
+			if ((event.ctrlKey || event.metaKey) && event.key === 'a') {
+				while (class_bits_qty > 0){
+					provided_boundary_shift_left()
+				}
+			}
+			// if keycode
+			// console.log(Ip.subnet_mask)
+			draw()
+		}
+	)	
+
+	function subnet_boundary_shift_left(){
+		if (subnet_bit_number > 0){
+			subnet_bit_number --
+			host_bit_number ++
+		}
+	}
+
+	function subnet_boundary_shift_right(){
+		if (host_bit_number > 2){
+			subnet_bit_number ++
+			host_bit_number --
+		}
+	}
+
+	function provided_boundary_shift_left(){
+		if (subnet_class_bit_number > 0){
+			subnet_class_bit_number --
+			subnet_bit_number ++
+		}
+	}
+	function provided_boundary_shift_right(){
+		if (subnet_bit_number > 0){
+			subnet_class_bit_number ++
+			subnet_bit_number --
+		}
+	}
+
+	function to_the_most_left_subnet_boundary(){
+		while(subnet_bit_number > 0) {
+			subnet_boundary_shift_left()
+		}
+	}
+
+	function to_the_most_right_subnet_boundary(){
+		while(host_bit_number > LEAST_SUBNET_BITS){
+			subnet_boundary_shift_right()
+		}
+	}
+
+	function determine_subnet_address(ip, subnetmask){
+		
+	}
+
+	function draw(){
+		// var subnet_mask = subnet_class_bit_number + subnet_bit_number
+		let subnet_mask = '0'.repeat(host_bit_number).padStart(32,'1'),
+		subnet_mask_octets = [];
+		subnet_mask_decimal = []
+		
+
+		for (let i = 0; i < IP_MAX_BITS/OCTET_BITS; i++){
+			subnet_mask_octets.push(subnet_mask.slice(
+			OCTET_BITS * i, 
+			OCTET_BITS * i + OCTET_BITS))
+			
+		}
+
+		for (let each of subnet_mask_octets){
+			subnet_mask_decimal.push(parseInt(each, 2))
+		}
+		
+		document.getElementById("mask_bin").firstChild.innerText = subnet_mask_octets.join('.')
+		document.getElementById("mask_dec").firstChild.innerText = subnet_mask_decimal.join('.')
+
+
+		var formatted_full_bin_ip = ip_bin.join('.')
+
+		var subnet_class_bits = formatted_full_bin_ip.slice(
+			IP_BEGIN_INDEX, 
+			index_offset_with_formatted_ip(subnet_class_bit_number)
+		),
+		subnet_bits = formatted_full_bin_ip.slice(
+			index_offset_with_formatted_ip(subnet_class_bit_number), 
+			index_offset_with_formatted_ip(subnet_class_bit_number + subnet_bit_number)
+		)
+
+		host_bits = formatted_full_bin_ip.slice( index_offset_with_formatted_ip(IP_MAX_BITS - host_bit_number))
+
+		var full_bin_ip = [subnet_class_bits, subnet_bits, host_bits]
+			// insert binary ip into html
+		for (let [index, each_part] of full_bin_ip.entries()){
+			document.getElementById("ip_bin").getElementsByClassName("octet")[index].innerText = each_part
+		}
+		// insert decimal ip into html
+		for (let [index, octet] of ip_octets.entries()){
+			document.getElementById("ip_dec").getElementsByClassName("octet")[index].innerText = octet.toString()
+			// .padStart(OCTET_BITS, "_")
+			// document.getElementById("ip_bin").getElementsByClassName("octet")[index].innerText = ip_bin[index]
+		}
+		// This is for /n format.
+		for (let i = 0; i < document.getElementsByClassName("slashed_mask").length; i++){
+			document.getElementsByClassName("slashed_mask")[i].innerText = '/' + (subnet_class_bit_number + subnet_bit_number).toString()
+		}
+	}
+
+
+	function generate_random(min, max){
+		/* Generate a random number. */
+		let random_number = Math.random() * (max - min) + min;
+		return Math.floor(random_number)
+	}
+
+
+	function generate_ip(){
+		/* Generate 4 octets of IP addr. */
+		let _ip_octets = []
+		for (let i = 0; i < IP_OCTET_QTY; i++){
+			let octet_value = generate_random(0x00, 0xff)
+			_ip_octets.push(octet_value)
+		}
+		return _ip_octets
+	}
+
+
+	function convert_to_8bits_bin(ip_blocks){
+		let _ip_binary_octets = []
+		for (let each_octet of ip_blocks){
+			_ip_binary_octets.push(each_octet.toString(2).padStart(OCTET_BITS, "0"))
+		}
+		return _ip_binary_octets
+	}
+
+	function insert_at_index(text, insertion, index){
+		/* Insert after index. */
+		let _text = text
+		let _index_offset = 1
+		let _index = index + _index_offset
+		return text.slice(0, _index) + insertion + text.slice(_index)
+	}
+
+
+	function index_offset_with_formatted_ip(formatted_bin_ip_index){
+		/* 
+		Make sure the boundary are created within these indeces:
+		0~7, 9~16, 18~25, 27~34
+		*/
+		return formatted_bin_ip_index + Math.floor(formatted_bin_ip_index/OCTET_BITS)
+	}
+
+</script>
+</html>
