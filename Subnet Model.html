@@ -189,8 +189,18 @@
 			}
 			return (subnet_mask_octets).join('.')
 		},
-		dec: function(){
-			return stringBinToIntIp(this.bin)
+		to_bin_array: function(){
+			return bin32_to_4_octets(this.bin)
+		},
+		to_dec_array: function(){
+			/* IP in dec, in a 4-part array */
+			return stringBinToIntIp(bin32_to_4_octets(this.bin))
+		},
+		to_dotted_bin: function(){
+			return this.to_bin_array().join(".")
+		},
+		to_dotted_dec: function () {
+			return this.to_dec_array().join(".")
 		},
 		get_subnet_bits: function() {
 			return this.class_bit_number + this.subnet_bit_number
@@ -198,7 +208,7 @@
 		show: function () {
 			console.log(
 			`IP: ${this.bin},
-Dec: ${this.dec()},
+Dec: ${this.to_dec_array()},
 Class: ${this.class_bit_number},
 Subnet cap: ${this.subnet_bit_number},
 Host cap: ${this.host_bit_number}`)
@@ -288,7 +298,7 @@ Host cap: ${this.host_bit_number}`)
 		// }
 
 		// insert decimal ip into html
-		for (let [index, octet] of ip.dec().entries()){
+		for (let [index, octet] of ip.to_dec_array().entries()){
 			document.getElementById("ip_dec").getElementsByClassName("octet")[index].innerText = octet.toString()
 			// document.getElementById("ip_bin").getElementsByClassName("octet")[index].innerText = ip_bin[index]
 		}
