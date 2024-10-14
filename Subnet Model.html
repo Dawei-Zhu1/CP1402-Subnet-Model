@@ -181,16 +181,19 @@
 		convert_subnet_mask: function () {
 			let subnet_mask ='0'.repeat(this.host_bit_number).padStart(32,'1')
 			let subnet_mask_octets = []
-			for (let i = 0; i < IP_MAX_BITS/OCTET_BITS; i++){
+			for (let i = 0; i < IP_OCTET_QTY; i++){
 				subnet_mask_octets.push(subnet_mask.slice(
 					OCTET_BITS * i, 
-					OCTET_BITS * i + OCTET_BITS)
+					OCTET_BITS * (i + 1))
 				)
 			}
 			return (subnet_mask_octets).join('.')
 		},
 		dec: function(){
 			return stringBinToIntIp(this.bin)
+		},
+		get_subnet_bits: function() {
+			return this.class_bit_number + this.subnet_bit_number
 		},
 		show: function () {
 			console.log(
@@ -283,15 +286,16 @@ Host cap: ${this.host_bit_number}`)
 		// for (let [index, each_part] of full_bin_ip.entries()){
 		// 	document.getElementById("ip_bin").getElementsByClassName("octet")[index].innerText = each_part
 		// }
+		
 		// insert decimal ip into html
 		for (let [index, octet] of ip.dec().entries()){
 			document.getElementById("ip_dec").getElementsByClassName("octet")[index].innerText = octet.toString()
 			// document.getElementById("ip_bin").getElementsByClassName("octet")[index].innerText = ip_bin[index]
 		}
-		// // This is for /n format.
-		// for (let i = 0; i < document.getElementsByClassName("slashed_mask").length; i++){
-		// 	document.getElementsByClassName("slashed_mask")[i].innerText = '/' + (subnet_class_bit_number + subnet_bit_number).toString()
-		// }
+		// This is for /n format.
+		for (let i = 0; i < document.getElementsByClassName("slashed_mask").length; i++){
+			document.getElementsByClassName("slashed_mask")[i].innerText = '/ ' + (ip.get_subnet_bits()).toString()
+		}
 	}
 
 
