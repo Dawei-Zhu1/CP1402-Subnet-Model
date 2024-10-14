@@ -126,13 +126,11 @@
 
 	var ip = {
 		bin: null,
-		subnet_mask: null,
 		class_bit_number: 16,
 		subnet_bit_number: 8,
 		host_bit_number: 8,
 		__initialise__: function (){
 			this.bin = generateBinIp()
-			this.subnet_mask = this.convert_subnet_mask()
 		},
 		subnet_boundary_shift_left: function () {
 			if (this.subnet_bit_number > 0){
