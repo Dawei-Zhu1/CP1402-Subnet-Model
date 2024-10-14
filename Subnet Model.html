@@ -181,6 +181,7 @@
 			return bin32_to_4_octets(subnet_mask)
 		},
 		to_bin_array: function(){
+			/* Return an array of 4 numbers */
 			return bin32_to_4_octets(this.bin)
 		},
 		to_dec_array: function(){
@@ -188,15 +189,18 @@
 			return stringBinToIntIp(bin32_to_4_octets(this.bin))
 		},
 		to_dotted_bin: function(){
+			/* Return a string repr bin octet, separated by dot */
 			return this.to_bin_array().join(".")
 		},
 		to_dotted_dec: function () {
 			return this.to_dec_array().join(".")
 		},
 		get_subnet_bits: function() {
+			/* The sum of class bits number and subnet capacity */
 			return this.class_bit_number + this.subnet_bit_number
 		},
 		show: function () {
+			/* Debug */
 			console.log(
 			`IP: ${this.bin},
 Dec: ${this.to_dec_array()},
@@ -367,8 +371,14 @@ Host cap: ${this.host_bit_number}`)
 
 	function index_offset_with_formatted_ip(formatted_bin_ip_index){
 		/* 
+		Deal with 32bit+dots format ip, skip these dots
 		Make sure the boundary are created within these indeces:
 		0~7, 9~16, 18~25, 27~34
+		0 -> 0 * 8 + 0
+		8 -> 9 = 1 * 8 + 1
+		16 -> 18 = 2 * 8 + 2
+		24 -> 27 = 3 * 8 + 3
+		n -> n * 8 + n = 9n
 		*/
 		return formatted_bin_ip_index + Math.floor(formatted_bin_ip_index/OCTET_BITS)
 	}
