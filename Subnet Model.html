@@ -176,16 +176,9 @@
 				this.provided_boundary_shift_right()
 			}
 		},
-		convert_subnet_mask: function () {
+		get_subnet_mask: function () {
 			let subnet_mask ='0'.repeat(this.host_bit_number).padStart(32,'1')
-			let subnet_mask_octets = []
-			for (let i = 0; i < IP_OCTET_QTY; i++){
-				subnet_mask_octets.push(subnet_mask.slice(
-					OCTET_BITS * i, 
-					OCTET_BITS * (i + 1))
-				)
-			}
-			return (subnet_mask_octets).join('.')
+			return bin32_to_4_octets(subnet_mask)
 		},
 		to_bin_array: function(){
 			return bin32_to_4_octets(this.bin)
@@ -338,7 +331,16 @@ Host cap: ${this.host_bit_number}`)
 		/* String binary to decimal number */
 		return parseInt(int_str, 2)
 	}
-	function stringBinToIntIp(string_bin){
+	function bin32_to_4_octets(bin_32){
+		/* Devide 32 bit bin-in-str to 4 octets */
+		let result = []
+		for (let i = 0; i < IP_OCTET_QTY; i++){
+			let octet_bin = bin_32.slice(i * OCTET_BITS, (i + 1) * OCTET_BITS)
+			result.push(octet_bin)
+		}
+		return result
+	}
+	function stringBinToIntIp(four_octets){
 		/* Convert literal bin ip to decimal ip */
 		let result = []
 		let octet_bin = ""
