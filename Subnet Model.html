@@ -6,16 +6,16 @@
 	<title>Subnet Example</title>
 </head>
 <style>
-    * {
-        /* padding: 0; */
-        /* margin: 0; */
-    }
+    /* * {
+        padding: 0;
+        margin: 0;
+    } */
 	html{
 		font-family: 'Courier New', Courier, monospace;
 	}
-	#ipv4{
-		/* font-size: 0px;text-align: center; */
-	}
+	/* #ipv4{
+		font-size: 0px;text-align: center;
+	} */
 	#ipv4 span{
 		font-size: 24px;
 		display: inline-block;
@@ -91,16 +91,23 @@
 						</div>
 						
 					</div>
-					<menu>
+					<menu id="console">
 						<div>
 							<label for="subnet_type"></label>
-							<input type="button" name="subnet_type" value="Subnet &lt;" onclick="subnet_boundary_shift_left();draw()">
-							<input type="button" name="subnet_type" value="Subnet &gt;" onclick="subnet_boundary_shift_right();draw()">
+							<input type="button" name="subnet_type" value="&lt;&lt;" onclick="ip.to_the_most_left_subnet_boundary();draw(ip)">
+							<input type="button" name="subnet_type" value="&lt;" onclick="ip.subnet_boundary_shift_left();draw(ip)">
+                            <span>Subnet</span>
+							<input type="button" name="subnet_type" value="&gt;" onclick="ip.subnet_boundary_shift_right(),draw(ip)">
+							<input type="button" name="subnet_type" value="&gt;&gt;" onclick="ip.to_the_most_right_subnet_boundary(),draw(ip)">
+
 						</div>
 						<div>
 							<label for="subnet_type"></label>
-							<input type="button" name="subnet_type" value="Provider subnet &lt;" onclick="provided_boundary_shift_left();draw()">
-							<input type="button" name="subnet_type" value="Provider subnet &gt;" onclick="provided_boundary_shift_right();draw()">
+							<input type="button" name="subnet_type" value="&lt;&lt;" onclick="ip.to_the_most_left_provided_boundary();draw(ip)">
+							<input type="button" name="subnet_type" value="&lt;" onclick="ip.provided_boundary_shift_left();draw(ip)">
+							<span>Provider Subnet</span>
+							<input type="button" name="subnet_type" value=" &gt;" onclick="ip.provided_boundary_shift_right();draw(ip)">
+							<input type="button" name="subnet_type" value="&gt;&gt;" onclick="ip.to_the_most_right_provided_boundary();draw(ip)">
 						</div>
 					</menu>
 				</div>
@@ -117,49 +124,62 @@
 	OCTET_BITS = 8,
 	LEAST_SUBNET_BITS = 2
 
-	var ip_octets = generate_ip(),
-		ip_bin = convert_to_8bits_bin(ip_octets),
-		subnet_class_bit_number = 16,
-		subnet_bit_number = 8,
-		host_bit_number = 8,
-		subnet_mask_decimal = [];
-
-	var Ip = {
-		dec: [],
+	var ip = {
 		bin: "",
 		subnet_mask: "",
-		class_bits_qty: 16,
-		subnet_bit_qty: 8,
-		host_bit_qty: 8,
+		class_bit_number: 16,
+		subnet_bit_number: 8,
+		host_bit_number: 8,
 		__initialise__: function (){
-			this.dec = generate_ip()
-			this.bin = convert_to_8bits_bin(this.dec)
+			this.bin = generate_ip()
 			this.subnet_mask = this.convert_subnet_mask()
 		},
 		subnet_boundary_shift_left: function () {
-			if (this.subnet_bit_qty > 0){
-				this.subnet_bit_qty --
-				this.host_bit_qty ++
+			if (this.subnet_bit_number > 0){
+				this.subnet_bit_number --
+				this.host_bit_number ++
 			}
 		},
 		subnet_boundary_shift_right: function () {
-			if (this.host_bit_number> LEAST_SUBNET_BITS){
-				this.subnet_bit_qty ++
-				this.host_bit_qty --
+			if (this.host_bit_number > 2){
+				this.subnet_bit_number ++
+				this.host_bit_number --
+			}
+		},
+		provided_boundary_shift_left: function () {
+			if (this.class_bit_number > 0){
+				this.class_bit_number --
+				this.subnet_bit_number ++
+			}
+		},
+		provided_boundary_shift_right: function () {
+			if (this.subnet_bit_number > 0){
+				this.class_bit_number ++
+				this.subnet_bit_number --
 			}
 		},
 		to_the_most_left_subnet_boundary: function(){
-			while(this.subnet_bit_qty > 0) {
-				subnet_boundary_shift_left()
+			while(this.subnet_bit_number > 0) {
+				this.subnet_boundary_shift_left()
 			}
 		},
 		to_the_most_right_subnet_boundary: function(){
-			while(this.subnet_bit_qty > LEAST_SUBNET_BITS){
-				subnet_boundary_shift_right()
+			while(this.subnet_bit_number > LEAST_SUBNET_BITS){
+				this.subnet_boundary_shift_right()
+			}
+		},
+		to_the_most_left_provided_boundary: function(){
+			while(this.class_bit_number > 0) {
+				this.provided_boundary_shift_left()
+			}
+		},
+		to_the_most_right_provided_boundary: function(){
+			while(this.subnet_bit_number > 0){
+				this.provided_boundary_shift_right()
 			}
 		},
 		convert_subnet_mask: function () {
-			let subnet_mask ='0'.repeat(this.host_bit_qty).padStart(32,'1')
+			let subnet_mask ='0'.repeat(this.host_bit_number).padStart(32,'1')
 			let subnet_mask_octets = []
 			for (let i = 0; i < IP_MAX_BITS/OCTET_BITS; i++){
 				subnet_mask_octets.push(subnet_mask.slice(
@@ -169,149 +189,106 @@
 			}
 			return (subnet_mask_octets).join('.')
 		},
-		// draw: function () {
-			
-		// }
-	}
+		show: function () {
+			console.log(`IP: ${this.bin},
+				Class: ${this.class_bit_number},
+				Subnet cap: ${this.subnet_bit_number},
+				Host cap: ${this.host_bit_number}`)
+		}
 
+	}
+	ip.__initialise__()
 	draw()
 
 	document.addEventListener('keydown', 
 		(event)=>{
 			var keyname = event.key,
 			keycode = event.code
-			console.log(keyname)
 			event.preventDefault()
 			// Single key
 			if (keyname == 'ArrowLeft'){
-				subnet_boundary_shift_left()
-				// Ip.subnet_boundary_shift_left()
-				// console.log(Ip.subnet_bit_qty)
+				ip.subnet_boundary_shift_left()
 			}
 			if (keyname == 'ArrowRight'){
-				subnet_boundary_shift_right()
-				// Ip.subnet_boundary_shift_right()
-				// console.log(Ip.subnet_bit_qty)
+				ip.subnet_boundary_shift_right()
 			}
 			if (keyname == 'a'){
-				provided_boundary_shift_left()
+				ip.provided_boundary_shift_left()
 			}
 			if (keyname == 'd'){
-				provided_boundary_shift_right()
+				ip.provided_boundary_shift_right()
 			}
 			// Ctrl + ArrLeft
 			if ((event.ctrlKey || event.metaKey) && event.key === 'ArrowLeft') {
-				to_the_most_left_subnet_boundary()
+				ip.to_the_most_left_subnet_boundary()
 			}
 
 			if ((event.ctrlKey || event.metaKey) && event.key === 'ArrowRight') {
-				to_the_most_right_subnet_boundary()
+				ip.to_the_most_right_subnet_boundary()
 			}
 
 			if ((event.ctrlKey || event.metaKey) && event.key === 'a') {
-				while (class_bits_qty > 0){
-					provided_boundary_shift_left()
-				}
+				ip.to_the_most_left_provided_boundary()
 			}
-			// if keycode
-			// console.log(Ip.subnet_mask)
+			if ((event.ctrlKey || event.metaKey) && event.key === 'd') {
+				ip.to_the_most_right_provided_boundary()
+			}
+			ip.show()
 			draw()
 		}
 	)	
 
-	function subnet_boundary_shift_left(){
-		if (subnet_bit_number > 0){
-			subnet_bit_number --
-			host_bit_number ++
-		}
-	}
-
-	function subnet_boundary_shift_right(){
-		if (host_bit_number > 2){
-			subnet_bit_number ++
-			host_bit_number --
-		}
-	}
-
-	function provided_boundary_shift_left(){
-		if (subnet_class_bit_number > 0){
-			subnet_class_bit_number --
-			subnet_bit_number ++
-		}
-	}
-	function provided_boundary_shift_right(){
-		if (subnet_bit_number > 0){
-			subnet_class_bit_number ++
-			subnet_bit_number --
-		}
-	}
-
-	function to_the_most_left_subnet_boundary(){
-		while(subnet_bit_number > 0) {
-			subnet_boundary_shift_left()
-		}
-	}
-
-	function to_the_most_right_subnet_boundary(){
-		while(host_bit_number > LEAST_SUBNET_BITS){
-			subnet_boundary_shift_right()
-		}
-	}
-
-	function determine_subnet_address(ip, subnetmask){
-		
-	}
 
 	function draw(){
-		// var subnet_mask = subnet_class_bit_number + subnet_bit_number
-		let subnet_mask = '0'.repeat(host_bit_number).padStart(32,'1'),
-		subnet_mask_octets = [];
-		subnet_mask_decimal = []
+		// // var subnet_mask = subnet_class_bit_number + subnet_bit_number
+		// let subnet_mask = '0'.repeat(host_bit_number).padStart(32,'1'),
+		// subnet_mask_octets = [];
+		// subnet_mask_decimal = []
 		
 
-		for (let i = 0; i < IP_MAX_BITS/OCTET_BITS; i++){
-			subnet_mask_octets.push(subnet_mask.slice(
-			OCTET_BITS * i, 
-			OCTET_BITS * i + OCTET_BITS))
+		// for (let i = 0; i < IP_MAX_BITS/OCTET_BITS; i++){
+		// 	subnet_mask_octets.push(subnet_mask.slice(
+		// 	OCTET_BITS * i, 
+		// 	OCTET_BITS * i + OCTET_BITS))
 			
-		}
+		// }
 
-		for (let each of subnet_mask_octets){
-			subnet_mask_decimal.push(parseInt(each, 2))
-		}
+		// for (let each of subnet_mask_octets){
+		// 	subnet_mask_decimal.push(parseInt(each, 2))
+		// }
 		
-		document.getElementById("mask_bin").firstChild.innerText = subnet_mask_octets.join('.')
-		document.getElementById("mask_dec").firstChild.innerText = subnet_mask_decimal.join('.')
+		// document.getElementById("mask_bin").firstChild.innerText = subnet_mask_octets.join('.')
+		// document.getElementById("mask_dec").firstChild.innerText = subnet_mask_decimal.join('.')
 
 
-		var formatted_full_bin_ip = ip_bin.join('.')
+		// var formatted_full_bin_ip = ip_bin.join('.')
 
-		var subnet_class_bits = formatted_full_bin_ip.slice(
-			IP_BEGIN_INDEX, 
-			index_offset_with_formatted_ip(subnet_class_bit_number)
-		),
-		subnet_bits = formatted_full_bin_ip.slice(
-			index_offset_with_formatted_ip(subnet_class_bit_number), 
-			index_offset_with_formatted_ip(subnet_class_bit_number + subnet_bit_number)
-		)
+		// var subnet_class_bits = formatted_full_bin_ip.slice(
+		// 	IP_BEGIN_INDEX, 
+		// 	index_offset_with_formatted_ip(subnet_class_bit_number)
+		// ),
+		// subnet_bits = formatted_full_bin_ip.slice(
+		// 	index_offset_with_formatted_ip(subnet_class_bit_number), 
+		// 	index_offset_with_formatted_ip(subnet_class_bit_number + subnet_bit_number)
+		// )
 
-		host_bits = formatted_full_bin_ip.slice( index_offset_with_formatted_ip(IP_MAX_BITS - host_bit_number))
+		// host_bits = formatted_full_bin_ip.slice( index_offset_with_formatted_ip(IP_MAX_BITS - host_bit_number))
 
-		var full_bin_ip = [subnet_class_bits, subnet_bits, host_bits]
-			// insert binary ip into html
-		for (let [index, each_part] of full_bin_ip.entries()){
-			document.getElementById("ip_bin").getElementsByClassName("octet")[index].innerText = each_part
-		}
-		// insert decimal ip into html
-		for (let [index, octet] of ip_octets.entries()){
-			document.getElementById("ip_dec").getElementsByClassName("octet")[index].innerText = octet.toString()
-			// .padStart(OCTET_BITS, "_")
-			// document.getElementById("ip_bin").getElementsByClassName("octet")[index].innerText = ip_bin[index]
-		}
-		// This is for /n format.
-		for (let i = 0; i < document.getElementsByClassName("slashed_mask").length; i++){
-			document.getElementsByClassName("slashed_mask")[i].innerText = '/' + (subnet_class_bit_number + subnet_bit_number).toString()
-		}
+		// var full_bin_ip = [subnet_class_bits, subnet_bits, host_bits]
+		// 	// insert binary ip into html
+		// for (let [index, each_part] of full_bin_ip.entries()){
+		// 	document.getElementById("ip_bin").getElementsByClassName("octet")[index].innerText = each_part
+		// }
+		// // insert decimal ip into html
+		// for (let [index, octet] of ip_octets.entries()){
+		// 	document.getElementById("ip_dec").getElementsByClassName("octet")[index].innerText = octet.toString()
+		// 	// .padStart(OCTET_BITS, "_")
+		// 	// document.getElementById("ip_bin").getElementsByClassName("octet")[index].innerText = ip_bin[index]
+		// }
+		// // This is for /n format.
+		// for (let i = 0; i < document.getElementsByClassName("slashed_mask").length; i++){
+		// 	document.getElementsByClassName("slashed_mask")[i].innerText = '/' + (subnet_class_bit_number + subnet_bit_number).toString()
+		// }
 	}
 
 
