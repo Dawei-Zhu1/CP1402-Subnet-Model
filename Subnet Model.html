@@ -286,15 +286,15 @@ Host cap: ${this.host_bit_number}`)
 		// for (let [index, each_part] of full_bin_ip.entries()){
 		// 	document.getElementById("ip_bin").getElementsByClassName("octet")[index].innerText = each_part
 		// }
-		
+
 		// insert decimal ip into html
 		for (let [index, octet] of ip.dec().entries()){
 			document.getElementById("ip_dec").getElementsByClassName("octet")[index].innerText = octet.toString()
 			// document.getElementById("ip_bin").getElementsByClassName("octet")[index].innerText = ip_bin[index]
 		}
-		// This is for /n format.
+		// This is for ip.ip.ip.ip/xx (slash).
 		for (let i = 0; i < document.getElementsByClassName("slashed_mask").length; i++){
-			document.getElementsByClassName("slashed_mask")[i].innerText = '/ ' + (ip.get_subnet_bits()).toString()
+			document.getElementsByClassName("slashed_mask")[i].innerText = '/ ' + ip.get_subnet_bits().toString()
 		}
 	}
 
