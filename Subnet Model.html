@@ -125,13 +125,13 @@
 	LEAST_SUBNET_BITS = 2
 
 	var ip = {
-		bin: "",
-		subnet_mask: "",
+		bin: null,
+		subnet_mask: null,
 		class_bit_number: 16,
 		subnet_bit_number: 8,
 		host_bit_number: 8,
 		__initialise__: function (){
-			this.bin = generate_ip()
+			this.bin = generateBinIp()
 			this.subnet_mask = this.convert_subnet_mask()
 		},
 		subnet_boundary_shift_left: function () {
@@ -189,16 +189,21 @@
 			}
 			return (subnet_mask_octets).join('.')
 		},
+		dec: function(){
+			return stringBinToIntIp(this.bin)
+		},
 		show: function () {
-			console.log(`IP: ${this.bin},
-				Class: ${this.class_bit_number},
-				Subnet cap: ${this.subnet_bit_number},
-				Host cap: ${this.host_bit_number}`)
+			console.log(
+			`IP: ${this.bin},
+Dec: ${this.dec()},
+Class: ${this.class_bit_number},
+Subnet cap: ${this.subnet_bit_number},
+Host cap: ${this.host_bit_number}`)
 		}
 
 	}
 	ip.__initialise__()
-	draw()
+	draw(ip)
 
 	document.addEventListener('keydown', 
 		(event)=>{
@@ -218,15 +223,13 @@
 			if (keyname == 'd'){
 				ip.provided_boundary_shift_right()
 			}
-			// Ctrl + ArrLeft
+			// Ctrl + keyName
 			if ((event.ctrlKey || event.metaKey) && event.key === 'ArrowLeft') {
 				ip.to_the_most_left_subnet_boundary()
 			}
-
 			if ((event.ctrlKey || event.metaKey) && event.key === 'ArrowRight') {
 				ip.to_the_most_right_subnet_boundary()
 			}
-
 			if ((event.ctrlKey || event.metaKey) && event.key === 'a') {
 				ip.to_the_most_left_provided_boundary()
 			}
@@ -234,12 +237,13 @@
 				ip.to_the_most_right_provided_boundary()
 			}
 			ip.show()
-			draw()
+			draw(ip)
 		}
 	)	
 
 
-	function draw(){
+	function draw(ip){
+		
 		// // var subnet_mask = subnet_class_bit_number + subnet_bit_number
 		// let subnet_mask = '0'.repeat(host_bit_number).padStart(32,'1'),
 		// subnet_mask_octets = [];
@@ -279,12 +283,11 @@
 		// for (let [index, each_part] of full_bin_ip.entries()){
 		// 	document.getElementById("ip_bin").getElementsByClassName("octet")[index].innerText = each_part
 		// }
-		// // insert decimal ip into html
-		// for (let [index, octet] of ip_octets.entries()){
-		// 	document.getElementById("ip_dec").getElementsByClassName("octet")[index].innerText = octet.toString()
-		// 	// .padStart(OCTET_BITS, "_")
-		// 	// document.getElementById("ip_bin").getElementsByClassName("octet")[index].innerText = ip_bin[index]
-		// }
+		// insert decimal ip into html
+		for (let [index, octet] of ip.dec().entries()){
+			document.getElementById("ip_dec").getElementsByClassName("octet")[index].innerText = octet.toString()
+			// document.getElementById("ip_bin").getElementsByClassName("octet")[index].innerText = ip_bin[index]
+		}
 		// // This is for /n format.
 		// for (let i = 0; i < document.getElementsByClassName("slashed_mask").length; i++){
 		// 	document.getElementsByClassName("slashed_mask")[i].innerText = '/' + (subnet_class_bit_number + subnet_bit_number).toString()
@@ -298,8 +301,8 @@
 		return Math.floor(random_number)
 	}
 
-
-	function generate_ip(){
+	// function 
+	function generate_ip_in_dec(){
 		/* Generate 4 octets of IP addr. */
 		let _ip_octets = []
 		for (let i = 0; i < IP_OCTET_QTY; i++){
@@ -309,7 +312,30 @@
 		return _ip_octets
 	}
 
+	function generateBinIp(){
+		/* Generate 32 binary ip in string */
+		let _ip_octets = ""
+		for (let i = 0; i < IP_OCTET_QTY; i++){
+			let octet_value = generate_random(0x00, 0xff)
+			_ip_octets+=octet_value.toString(2).padStart(OCTET_BITS, "0")
+		}
+		return _ip_octets
+	}
 
+	function binToDecNum(int_str){
+		/* String binary to decimal number */
+		return parseInt(int_str, 2)
+	}
+	function stringBinToIntIp(string_bin){
+		/* Convert literal bin ip to decimal ip */
+		let result = []
+		let octet_bin = ""
+		for (let i = 0; i < IP_OCTET_QTY; i++){
+			octet_bin = string_bin.slice(i * OCTET_BITS, (i + 1) * OCTET_BITS)
+			result.push(binToDecNum(octet_bin))
+		}
+		return result
+	}
 	function convert_to_8bits_bin(ip_blocks){
 		let _ip_binary_octets = []
 		for (let each_octet of ip_blocks){
