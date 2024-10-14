@@ -343,10 +343,8 @@ Host cap: ${this.host_bit_number}`)
 	function stringBinToIntIp(four_octets){
 		/* Convert literal bin ip to decimal ip */
 		let result = []
-		let octet_bin = ""
-		for (let i = 0; i < IP_OCTET_QTY; i++){
-			octet_bin = string_bin.slice(i * OCTET_BITS, (i + 1) * OCTET_BITS)
-			result.push(binToDecNum(octet_bin))
+		for (octet of four_octets){
+			result.push(binToDecNum(octet))
 		}
 		return result
 	}
