@@ -217,7 +217,6 @@ Sliced bin IP:
 	${this.get_sliced_dotted_bin_ip()[1]}
 	${this.get_sliced_dotted_bin_ip()[2]}`)
 		}
-
 	}
 	ip.__initialise__()
 	draw(ip)
@@ -309,11 +308,13 @@ Sliced bin IP:
 		for ([index, fragment] of ip.get_sliced_dotted_bin_ip().entries()){
 			document.getElementById("ip_bin").getElementsByClassName("octet")[index].innerText = fragment
 		}
-		// This is for ip.ip.ip.ip/xx (slash).
+		
+		// This is for / xx (slash).
 		for (let i = 0; i < document.getElementsByClassName("slashed_mask").length; i++){
 			document.getElementsByClassName("slashed_mask")[i].innerText = '/ ' + ip.get_subnet_bits().toString()
 		}
 	}
+
 
 
 	function generate_random(min, max){
