@@ -206,11 +206,16 @@
 		show: function () {
 			/* Debug */
 			console.log(
-			`IP: ${this.bin},
-Dec: ${this.to_dec_array()},
-Class: ${this.class_bit_number},
-Subnet cap: ${this.subnet_bit_number},
-Host cap: ${this.host_bit_number}`)
+			`IP: ${this.to_dotted_bin()};
+Dec: ${this.to_dec_array()};
+Class: ${this.class_bit_number};
+Subnet cap: ${this.subnet_bit_number};
+Host cap: ${this.host_bit_number};
+Subnet Mask: ${this.get_subnet_mask()};
+Sliced bin IP: 
+	${this.get_sliced_dotted_bin_ip()[0]}
+	${this.get_sliced_dotted_bin_ip()[1]}
+	${this.get_sliced_dotted_bin_ip()[2]}`)
 		}
 
 	}
