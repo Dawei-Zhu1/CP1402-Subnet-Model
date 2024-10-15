@@ -304,7 +304,10 @@ Sliced bin IP:
 		// insert decimal ip into html
 		for (let [index, octet] of ip.to_dec_array().entries()){
 			document.getElementById("ip_dec").getElementsByClassName("octet")[index].innerText = octet.toString()
-			// document.getElementById("ip_bin").getElementsByClassName("octet")[index].innerText = ip_bin[index]
+		}
+		// insert 3-fregment binary 
+		for ([index, fragment] of ip.get_sliced_dotted_bin_ip().entries()){
+			document.getElementById("ip_bin").getElementsByClassName("octet")[index].innerText = fragment
 		}
 		// This is for ip.ip.ip.ip/xx (slash).
 		for (let i = 0; i < document.getElementsByClassName("slashed_mask").length; i++){
