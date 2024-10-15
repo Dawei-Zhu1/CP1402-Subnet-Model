@@ -184,6 +184,33 @@
 			let subnet_mask ='0'.repeat(this.host_bit_number).padStart(32,'1')
 			return bin32_to_4_octets(subnet_mask)
 		},
+		slice_by_boundaries: function(dotted_bin){
+			/* 
+			Return an array of 3 components, sliced by 2 boundaries
+			<div id="whole">
+				<div id="subnet">
+					<div id="provided">
+					</div>
+				</div>
+			</div>
+			 */
+			let formatted_bin = dotted_bin
+			let provided_network_bits = formatted_bin.slice(
+				0, 
+				index_offset_with_formatted_ip(this.class_bit_number)
+			)
+			let subnet_network_bits = formatted_bin.slice(
+				index_offset_with_formatted_ip(this.class_bit_number), 
+				index_offset_with_formatted_ip(this.get_subnet_bits())
+			)
+			let host_bits = formatted_bin.slice(
+				index_offset_with_formatted_ip(this.get_subnet_bits())
+			)
+			return [provided_network_bits, subnet_network_bits, host_bits]
+		},
+		get_sliced_dotted_bin_ip: function () {
+			return this.slice_by_boundaries(this.to_dotted_bin())
+		},
 		to_bin_array: function(){
 			/* Return an array of 4 numbers */
 			return bin32_to_4_octets(this.bin)
