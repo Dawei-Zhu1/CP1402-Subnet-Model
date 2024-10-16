@@ -89,6 +89,11 @@
 					<div id="info">
 						<h2>Subnet Info</h2>
 						<div id="subnet_mask">
+							<div>
+								<span>This IP belongs to:</span><br />
+								<span id="subnet_of_this_ip_dec"></span><span class="slashed_mask"></span><br />
+								<span id="subnet_of_this_ip_bin"></span><span class="slashed_mask"></span>
+							</div>
 							<div id="mask_dec"><span></span><span class="slashed_mask"></span></div>
 							<div id="mask_bin"><span></span><span class="slashed_mask"></span></div>
 							
@@ -182,7 +187,7 @@
 		},
 		get_subnet_mask: function () {
 			let subnet_mask ='0'.repeat(this.host_bit_number).padStart(32,'1')
-			return bin32_to_4_octets(subnet_mask)
+			return bin32_to_bin_array(subnet_mask)
 		},
 		slice_by_boundaries: function(dotted_bin){
 			/* 
@@ -192,7 +197,7 @@
 			let formatted_bin = dotted_bin
 			let provided_network_bits = formatted_bin.slice(
 				0, 
-				index_offset_with_formatted_ip(this.class_bit_number)
+				index_offset_with_formatted_ip(this.class_bit_number) 
 			)
 			let subnet_network_bits = formatted_bin.slice(
 				index_offset_with_formatted_ip(this.class_bit_number), 
@@ -208,11 +213,11 @@
 		},
 		to_bin_array: function(){
 			/* Return an array of 4 numbers */
-			return bin32_to_4_octets(this.bin)
+			return bin32_to_bin_array(this.bin)
 		},
 		to_dec_array: function(){
 			/* IP in dec, in a 4-part array */
-			return stringBinToIntIp(bin32_to_4_octets(this.bin))
+			return bin_array_to_dec_array(bin32_to_bin_array(this.bin))
 		},
 		to_dotted_bin: function(){
 			/* Return a string repr bin octet, separated by dot */
@@ -225,6 +230,22 @@
 			/* The sum of class bits number and subnet capacity */
 			return this.class_bit_number + this.subnet_bit_number
 		},
+		get_this_subnet_bin: function(){
+			let _subnet_mask = this.get_subnet_mask() 
+			let _ip_bin_octets = this.to_bin_array()
+			let result = []
+			for (let [index, subnet_octet] of _subnet_mask.entries()){
+				let bit_and = binStrToDecNum(subnet_octet) & _ip_bin_octets[index]
+				result.push(dec_to_8bit_bin(bit_and))
+			}
+			return result.join("")
+		},
+		get_this_subnet_bin_array: function(){
+			return bin32_to_bin_array(this.get_this_subnet_bin())
+		},
+		get_this_subnet_dec_array: function(){
+			return bin32_to_dec_array(this.get_this_subnet_bin())
+		},
 		show: function () {
 			/* Debug */
 			console.log(
@@ -234,10 +255,8 @@ Class: ${this.class_bit_number};
 Subnet cap: ${this.subnet_bit_number};
 Host cap: ${this.host_bit_number};
 Subnet Mask: ${this.get_subnet_mask()};
-Sliced bin IP: 
-	${this.get_sliced_dotted_bin_ip()[0]}
-	${this.get_sliced_dotted_bin_ip()[1]}
-	${this.get_sliced_dotted_bin_ip()[2]}`)
+Bin subnet: ${this.get_this_subnet_bin_array()};
+Dec subnet: ${this.get_this_subnet_dec_array()}`)
 		}
 	}
 	ip.__initialise__()
@@ -338,7 +357,6 @@ Sliced bin IP:
 	}
 
 
-
 	function generate_random(min, max){
 		/* Generate a random number. */
 		let random_number = Math.random() * (max - min) + min;
@@ -366,11 +384,23 @@ Sliced bin IP:
 		return _ip_octets
 	}
 
-	function binToDecNum(int_str){
+	function bin32_to_dec_array(bin32){
+		/* 32 bit binary style string to array of 4 decimal numbers */
+		_bin_array = bin32_to_bin_array(bin32)
+		return bin_array_to_dec_array(_bin_array)
+	}
+
+	function dec_array_to_bin32(dec_array){
+		_dec_array = dec_array
+		return dec_array_to_bin_array(_dec_array).join("")
+	}
+	console.log(dec_array_to_bin32([1,2,3,4]))
+
+	function binStrToDecNum(int_str){
 		/* String binary to decimal number */
 		return parseInt(int_str, 2)
 	}
-	function bin32_to_4_octets(bin_32){
+	function bin32_to_bin_array(bin_32){
 		/* Devide 32 bit bin-in-str to 4 octets */
 		let result = []
 		for (let i = 0; i < IP_OCTET_QTY; i++){
@@ -379,22 +409,28 @@ Sliced bin IP:
 		}
 		return result
 	}
-	function stringBinToIntIp(four_octets){
+
+	
+	
+	function bin_array_to_dec_array(four_octets){
 		/* Convert literal bin ip to decimal ip */
 		let result = []
 		for (octet of four_octets){
-			result.push(binToDecNum(octet))
+			result.push(binStrToDecNum(octet))
 		}
 		return result
 	}
-	function convert_to_8bits_bin(ip_blocks){
+	function dec_array_to_bin_array(ip_blocks){
+		/* Return an 8-bit bin style string */
 		let _ip_binary_octets = []
 		for (let each_octet of ip_blocks){
-			_ip_binary_octets.push(each_octet.toString(2).padStart(OCTET_BITS, "0"))
+			_ip_binary_octets.push(dec_to_8bit_bin(each_octet))
 		}
 		return _ip_binary_octets
 	}
-
+	function dec_to_8bit_bin(dec_num){
+		return dec_num.toString(2).padStart(OCTET_BITS, "0")
+	}
 	function insert_at_index(text, insertion, index){
 		/* Insert after index. */
 		let _text = text
@@ -402,7 +438,6 @@ Sliced bin IP:
 		let _index = index + _index_offset
 		return text.slice(0, _index) + insertion + text.slice(_index)
 	}
-
 
 	function index_offset_with_formatted_ip(formatted_bin_ip_index){
 		/* 
@@ -417,6 +452,5 @@ Sliced bin IP:
 		*/
 		return formatted_bin_ip_index + Math.floor(formatted_bin_ip_index/OCTET_BITS)
 	}
-
 </script>
 </html>
