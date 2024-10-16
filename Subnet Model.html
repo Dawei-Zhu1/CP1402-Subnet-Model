@@ -313,30 +313,34 @@ Dec subnet: ${this.get_this_subnet_dec_array()}`)
 			// Single key
 			if (keyname == 'ArrowLeft'){
 				ip.subnet_boundary_shift_left()
-			}
-			if (keyname == 'ArrowRight'){
+			} else if (keyname == 'ArrowRight'){
 				ip.subnet_boundary_shift_right()
-			}
-			if (keyname == 'a'){
+			} else if (keyname == 'a'){
 				ip.provided_boundary_shift_left()
-			}
-			if (keyname == 'd'){
+			} else if (keyname == 'd'){
 				ip.provided_boundary_shift_right()
-			}
-			// Ctrl + keyName
+			} else
+			// Shift + keyName
 			if (event.shiftKey && event.key === 'ArrowLeft') {
 				ip.to_the_most_left_subnet_boundary()
-			}
-			if (event.shiftKey && event.key === 'ArrowRight') {
+			} else if (event.shiftKey && event.key === 'ArrowRight') {
 				ip.to_the_most_right_subnet_boundary()
-			}
-			if (event.shiftKey && event.key === 'A') {
+			} else if (event.shiftKey && event.key === 'A') {
 				ip.to_the_most_left_provided_boundary()
-			}
-			if (event.shiftKey && event.key === 'D') {
+			} else if (event.shiftKey && event.key === 'D') {
+				ip.to_the_most_right_provided_boundary()
+			} else
+			// Alt + keyname
+			if (event.altKey && event.key === 'ArrowLeft') {
+				ip.subnet_boundary_to_left_octet()
+			} else if (event.altKey && event.key === 'ArrowRight') {
+				ip.to_the_most_right_subnet_boundary()
+			} else if (event.altKey && event.keyCode === 65) {
+				ip.class_boundary_to_left_octet()
+			} else if (event.altKey && event.keyCode === 68) {
 				ip.to_the_most_right_provided_boundary()
 			}
-			ip.show()
+			// console.log(event.keyCode)
 			draw(ip)
 		}
 	)	
