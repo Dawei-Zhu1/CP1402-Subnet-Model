@@ -231,14 +231,15 @@
 			return this.class_bit_number + this.subnet_bit_number
 		},
 		get_this_subnet_bin: function(){
-			let _subnet_mask = this.get_subnet_mask() 
-			let _ip_bin_octets = this.to_bin_array()
-			let result = []
+			/* Return a bin32 string */
+			let _subnet_mask = bin32_to_dec_array(this.get_subnet_mask()) 
+			let _ip_bin_octets = bin32_to_dec_array(this.bin)
+			let result_decimals = []
 			for (let [index, subnet_octet] of _subnet_mask.entries()){
-				let bit_and = binStrToDecNum(subnet_octet) & _ip_bin_octets[index]
-				result.push(dec_to_8bit_bin(bit_and))
+				let bit_and = subnet_octet & _ip_bin_octets[index]
+				result_decimals.push(bit_and)
 			}
-			return result.join("")
+			return dec_array_to_bin32(result_decimals)
 		},
 		get_this_subnet_bin_array: function(){
 			return bin32_to_bin_array(this.get_this_subnet_bin())
@@ -394,7 +395,6 @@ Dec subnet: ${this.get_this_subnet_dec_array()}`)
 		_dec_array = dec_array
 		return dec_array_to_bin_array(_dec_array).join("")
 	}
-	console.log(dec_array_to_bin32([1,2,3,4]))
 
 	function binStrToDecNum(int_str){
 		/* String binary to decimal number */
