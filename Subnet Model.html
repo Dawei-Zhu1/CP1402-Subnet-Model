@@ -223,9 +223,6 @@
 			/* Return a string repr bin octet, separated by dot */
 			return this.to_bin_array().join(".")
 		},
-		to_dotted_dec: function () {
-			return this.to_dec_array().join(".")
-		},
 		get_subnet_mask_length: function() {
 			/* The sum of class bits number and subnet capacity */
 			return this.class_bit_number + this.subnet_bit_number
