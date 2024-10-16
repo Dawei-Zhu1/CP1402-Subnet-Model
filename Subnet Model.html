@@ -304,7 +304,7 @@ Dec subnet: ${this.get_this_subnet_dec_array()}`)
 	}
 	ip.__initialise__()
 	draw(ip)
-
+	// SHORTCUTS
 	document.addEventListener('keydown', 
 		(event)=>{
 			var keyname = event.key,
@@ -324,16 +324,16 @@ Dec subnet: ${this.get_this_subnet_dec_array()}`)
 				ip.provided_boundary_shift_right()
 			}
 			// Ctrl + keyName
-			if ((event.ctrlKey || event.metaKey) && event.key === 'ArrowLeft') {
+			if (event.shiftKey && event.key === 'ArrowLeft') {
 				ip.to_the_most_left_subnet_boundary()
 			}
-			if ((event.ctrlKey || event.metaKey) && event.key === 'ArrowRight') {
+			if (event.shiftKey && event.key === 'ArrowRight') {
 				ip.to_the_most_right_subnet_boundary()
 			}
-			if ((event.ctrlKey || event.metaKey) && event.key === 'a') {
+			if (event.shiftKey && event.key === 'A') {
 				ip.to_the_most_left_provided_boundary()
 			}
-			if ((event.ctrlKey || event.metaKey) && event.key === 'd') {
+			if (event.shiftKey && event.key === 'D') {
 				ip.to_the_most_right_provided_boundary()
 			}
 			ip.show()
