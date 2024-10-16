@@ -306,7 +306,9 @@ Dec subnet: ${this.get_this_subnet_dec_array()}`)
 		for ([index, fragment] of ip.get_sliced_dotted_bin_ip().entries()){
 			document.getElementById("ip_bin").getElementsByClassName("octet")[index].innerText = fragment
 		}
-		
+		// Subnet info
+		document.getElementById("subnet_of_this_ip_dec").innerText = ip.get_this_subnet_dec_array().join(".")
+		document.getElementById("subnet_of_this_ip_bin").innerText = ip.get_this_subnet_bin_array().join(".")
 		
 		// This is for / xx (slash).
 		for (let i = 0; i < document.getElementsByClassName("slashed_mask").length; i++){
