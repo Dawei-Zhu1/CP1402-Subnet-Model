@@ -20,6 +20,14 @@
 		font-size: 24px;
 		display: inline-flex;
 	}
+	#ip_bin>*,
+	#mask_bin>*,
+	#subnet_of_this_ip_bin>*{
+		vertical-align: middle;
+	}
+	.segment{
+		min-width: 1px;
+	}
 	.subnet_class_bits {
 		color:burlywood;
 		font-weight: lighter;
@@ -33,11 +41,11 @@
 	.host_bits {
 		color: blueviolet;
 		font-weight: bold;
-		background-color: gold;
+		background-color: orange;
+		/* vertical-align: middle; */
 	}
 	#subnet_mask{
 		font-size: 24px;
-
 	}
 </style>
 <body>
@@ -94,7 +102,7 @@
 								<span>Dec: </span><br />
 								<span id="subnet_of_this_ip_dec"></span><span class="slashed_mask"></span></div>
 							<div id="subnet_of_this_ip_bin">
-								<span>Bin: </span><br />
+								<div><span>Bin: </span></div>
 								<span class="host_bits">
 									<span class="subnet_bits">
 										<span class="subnet_class_bits">
@@ -108,22 +116,32 @@
 							</div>
 						</div>
 						<div id="subnet_mask">
-							<div><span>Subnet Mask</span></div>
+							<h3>Subnet Mask</h3>
 							<div id="mask_dec">
 								<span>Dec: </span>
 								<span></span>
 								<span class="slashed_mask"></span>
 							</div>
 							<div id="mask_bin">
-								<span>Bin: </span>
-								<span></span>
+								<span>Bin: </span><br />
+								<span class="host_bits">
+									<span class="subnet_bits">
+										<span class="subnet_class_bits">
+											<span class="segment subnet_class_bits"></span>
+										</span>
+										<span class="segment subnet_bits"></span>
+									</span>
+									<span class="segment host_bits"></span>
+								</span>
 								<span class="slashed_mask"></span>
 							</div>
 						</div>
 						<div id="summary">
-							<span class="subnet_class_bits">Class bits: <span></span></span>
-							<span class="subnet_bits">Subnet bits: <span></span></span>
-							<span class="host_bits">host bits: <span></span></span><br />
+							<div id="bit_count">
+								<span class="subnet_class_bits">Class bits: <span></span></span>
+								<span class="subnet_bits">Subnet bits: <span></span></span>
+								<span class="host_bits">host bits: <span></span></span><br />
+							</div>
 							<span>This subnet can hold <span id="host_capacity" class="host_bits"></span> hosts.</span><br />
 							<span>This network can hold <span id="subnet_capacity" class="subnet_bits"></span>.</span>
 
@@ -344,7 +362,11 @@ Dec subnet: ${this.get_this_subnet_dec_array()}`)
 		}
 		// Subnet mask
 		document.getElementById("mask_dec").getElementsByTagName("span")[1].innerText = ip.get_this_subnet_dec_array().join(".")
-		document.getElementById("mask_dec").getElementsByTagName("span")[1].innerText = ip.get_this_subnet_dec_array().join(".")
+		let dotted_subnet_mask = bin32_to_bin_array(ip.get_subnet_mask()).join(".")
+		for (let [index, segment] of ip.slice_dotted_bin_by_boundaries(dotted_subnet_mask).entries()){
+			document.getElementById("mask_bin").getElementsByClassName("segment")[index].innerText = segment
+		}
+		
 
 		// This is for / xx (slash).
 		for (let i = 0; i < document.getElementsByClassName("slashed_mask").length; i++){
@@ -357,8 +379,8 @@ Dec subnet: ${this.get_this_subnet_dec_array()}`)
 		document.getElementById("summary").getElementsByClassName("host_bits")[0].getElementsByTagName("span")[0].innerText = ip.host_bit_number
 
 
-		document.getElementById("host_capacity").innerText = `2 ^ (host_bits_length)-2 = ${2**ip.host_bit_number - 2}`
-		document.getElementById("subnet_capacity").innerText = `2^(subnet_bits_length)-2 = ${2**ip.subnet_bit_number} ` + ((ip.subnet_bit_number > 0)?"subnets":"network")
+		document.getElementById("host_capacity").innerText = `2 ^ (host_bits) - 2 = ${2**ip.host_bit_number - 2}`
+		document.getElementById("subnet_capacity").innerText = `2 ^ (subnet_bits) = ${2**ip.subnet_bit_number} ` + ((ip.subnet_bit_number > 0)?"subnets":"network")
 
 	}
 
