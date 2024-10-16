@@ -187,8 +187,7 @@
 			}
 		},
 		get_subnet_mask: function () {
-			let subnet_mask ='0'.repeat(this.host_bit_number).padStart(32,'1')
-			return bin32_to_bin_array(subnet_mask)
+			return subnet_mask ='0'.repeat(this.host_bit_number).padStart(32,'1')
 		},
 		slice_by_boundaries: function(dotted_bin){
 			/* 
