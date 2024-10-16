@@ -301,47 +301,6 @@ Dec subnet: ${this.get_this_subnet_dec_array()}`)
 
 
 	function draw(ip){
-		
-		// // var subnet_mask = subnet_class_bit_number + subnet_bit_number
-		// let subnet_mask = '0'.repeat(host_bit_number).padStart(32,'1'),
-		// subnet_mask_octets = [];
-		// subnet_mask_decimal = []
-		
-
-		// for (let i = 0; i < IP_MAX_BITS/OCTET_BITS; i++){
-		// 	subnet_mask_octets.push(subnet_mask.slice(
-		// 	OCTET_BITS * i, 
-		// 	OCTET_BITS * i + OCTET_BITS))
-			
-		// }
-
-		// for (let each of subnet_mask_octets){
-		// 	subnet_mask_decimal.push(parseInt(each, 2))
-		// }
-		
-		// document.getElementById("mask_bin").firstChild.innerText = subnet_mask_octets.join('.')
-		// document.getElementById("mask_dec").firstChild.innerText = subnet_mask_decimal.join('.')
-
-
-		// var formatted_full_bin_ip = ip_bin.join('.')
-
-		// var subnet_class_bits = formatted_full_bin_ip.slice(
-		// 	IP_BEGIN_INDEX, 
-		// 	index_offset_with_formatted_ip(subnet_class_bit_number)
-		// ),
-		// subnet_bits = formatted_full_bin_ip.slice(
-		// 	index_offset_with_formatted_ip(subnet_class_bit_number), 
-		// 	index_offset_with_formatted_ip(subnet_class_bit_number + subnet_bit_number)
-		// )
-
-		// host_bits = formatted_full_bin_ip.slice( index_offset_with_formatted_ip(IP_MAX_BITS - host_bit_number))
-
-		// var full_bin_ip = [subnet_class_bits, subnet_bits, host_bits]
-		// 	// insert binary ip into html
-		// for (let [index, each_part] of full_bin_ip.entries()){
-		// 	document.getElementById("ip_bin").getElementsByClassName("octet")[index].innerText = each_part
-		// }
-
 		// insert decimal ip into html
 		for (let [index, octet] of ip.to_dec_array().entries()){
 			document.getElementById("ip_dec").getElementsByClassName("octet")[index].innerText = octet.toString()
@@ -350,6 +309,7 @@ Dec subnet: ${this.get_this_subnet_dec_array()}`)
 		for ([index, fragment] of ip.get_sliced_dotted_bin_ip().entries()){
 			document.getElementById("ip_bin").getElementsByClassName("octet")[index].innerText = fragment
 		}
+		
 		
 		// This is for / xx (slash).
 		for (let i = 0; i < document.getElementsByClassName("slashed_mask").length; i++){
