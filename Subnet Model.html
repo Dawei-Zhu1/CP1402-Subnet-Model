@@ -75,13 +75,12 @@
 					<span class="host_bits">
 						<span class="subnet_bits">
 							<span class="subnet_class_bits">
-								<span class="octet subnet_class_bits"></span>
+								<span class="segment subnet_class_bits"></span>
 							</span>
-							<span class="octet subnet_bits"></span>
+							<span class="segment subnet_bits"></span>
 						</span>
-						<span class="octet host_bits"></span>
+						<span class="segment host_bits"></span>
 					</span>
-
 					<span class="slashed_mask"></span>
 
 				</div>
@@ -89,14 +88,26 @@
 					<div id="info">
 						<h2>Subnet Info</h2>
 						<div id="subnet_info">
-								<span>This IP belongs to:</span><br />
-								<span id="subnet_of_this_ip_dec"></span><span class="slashed_mask"></span><br />
-								<span id="subnet_of_this_ip_bin"></span><span class="slashed_mask"></span>
+							<span>This IP belongs to:</span><br />
+							<div><span>Dec: </span><span id="subnet_of_this_ip_dec"></span><span class="slashed_mask"></span></div>
+							<div id="subnet_of_this_ip_bin">
+								<span>Bin: </span><br />
+								<span class="host_bits">
+									<span class="subnet_bits">
+										<span class="subnet_class_bits">
+											<span class="segment subnet_class_bits"></span>
+										</span>
+										<span class="segment subnet_bits"></span>
+									</span>
+									<span class="segment host_bits"></span>
+								</span>
+								<span class="slashed_mask"></span>
 							</div>
+						</div>
 						<div id="subnet_mask">
 							<div><span>Subnet Mask</span></div>
-							<div id="mask_dec"><span></span><span class="slashed_mask"></span></div>
-							<div id="mask_bin"><span></span><span class="slashed_mask"></span></div>
+							<div id="mask_dec"><span>Dec: </span><span class="slashed_mask"></span></div>
+							<div id="mask_bin"><span>Bin: </span><span class="slashed_mask"></span></div>
 							
 						</div>
 						
@@ -189,7 +200,7 @@
 		get_subnet_mask: function () {
 			return subnet_mask ='0'.repeat(this.host_bit_number).padStart(32,'1')
 		},
-		slice_by_boundaries: function(dotted_bin){
+		slice_dotted_bin_by_boundaries: function(dotted_bin){
 			/* 
 			Return an array of 3 components, sliced by 2 boundaries
 		
@@ -209,7 +220,7 @@
 			return [provided_network_bits, subnet_network_bits, host_bits]
 		},
 		get_sliced_dotted_bin_ip: function () {
-			return this.slice_by_boundaries(this.to_dotted_bin())
+			return this.slice_dotted_bin_by_boundaries(this.to_dotted_bin())
 		},
 		to_bin_array: function(){
 			/* Return an array of 4 numbers */
@@ -302,14 +313,19 @@ Dec subnet: ${this.get_this_subnet_dec_array()}`)
 		for (let [index, octet] of ip.to_dec_array().entries()){
 			document.getElementById("ip_dec").getElementsByClassName("octet")[index].innerText = octet.toString()
 		}
-		// insert 3-fregment binary 
-		for ([index, fragment] of ip.get_sliced_dotted_bin_ip().entries()){
-			document.getElementById("ip_bin").getElementsByClassName("octet")[index].innerText = fragment
+		// insert 3-segment binary 
+		for (let [index, fragment] of ip.get_sliced_dotted_bin_ip().entries()){
+			document.getElementById("ip_bin").getElementsByClassName("segment")[index].innerText = fragment
 		}
+
 		// Subnet info
 		document.getElementById("subnet_of_this_ip_dec").innerText = ip.get_this_subnet_dec_array().join(".")
-		document.getElementById("subnet_of_this_ip_bin").innerText = ip.get_this_subnet_bin_array().join(".")
-		
+
+		let this_dotted_subnet = ip.get_this_subnet_bin_array().join(".")
+		console.log(ip.slice_dotted_bin_by_boundaries(this_dotted_subnet))
+		for (let [index, segment] of ip.slice_dotted_bin_by_boundaries(this_dotted_subnet).entries()) {
+			document.getElementById("subnet_of_this_ip_bin").getElementsByClassName("segment")[index].innerText = segment
+		}
 		// This is for / xx (slash).
 		for (let i = 0; i < document.getElementsByClassName("slashed_mask").length; i++){
 			document.getElementsByClassName("slashed_mask")[i].innerText = '/ ' + ip.get_subnet_mask_length().toString()
