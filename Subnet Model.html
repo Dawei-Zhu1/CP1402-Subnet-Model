@@ -48,6 +48,14 @@
 		#subnet_mask{
 			font-size: 24px;
 		}
+		.class_bit_mask{
+			color: #fff;
+			background:#000 ;
+		}
+		.subnet_bit_mask{
+			background: #888;
+			color:#fff;
+		}
 		kbd{
 			background: #eee;
 			border: 0.5px solid gray;
@@ -73,11 +81,10 @@
 						<kbd>Shift</kbd>/<kbd>&#8679;</kbd>: shift to start/end place<br />
 					</section>
 				</div>
-				<h2>IP</h2>
+				<h2>Random IP</h2>
 				<div id="ipv4">
 					<div id="ip_dec">
-						<span>In dec: </span>
-						<br />
+						<span>Dec: </span>
 						<span class="octet"></span>
 						<span class="ip_seperator">.</span>
 
@@ -91,8 +98,7 @@
 						<span class="slashed_mask"></span>
 					</div>
 					<div id="ip_bin">
-						<span>In bin: </span>
-						<br />
+						<span>Bin: </span>
 						<span class="host_bits">
 							<span class="subnet_bits">
 								<span class="subnet_class_bits">
@@ -109,13 +115,35 @@
 						<div id="info">
 							<h2>Subnet Info</h2>
 							<div id="subnet_info">
-								<span>This IP belongs to:</span><br />
+								<div id="subnet_mask">
+									<h3>Subnet Mask</h3>
+									<div id="mask_dec">
+										<span>Dec: </span>
+										<span></span>
+										<span class="slashed_mask"></span>
+									</div>
+									<div id="mask_bin">
+										<span>Bin: </span>
+										<span class="host_bits">
+											<span class="subnet_bit_mask">
+												<span class="class_bit_mask">
+													<span class="segment class_bit_mask"></span>
+												</span>
+												<span class="segment subnet_bit_mask"></span>
+											</span>
+											<span class="segment host_bits"></span>
+										</span>
+										<span class="slashed_mask"></span>
+									</div>
+								</div>
+
+								<span>The random IP belongs to:</span><br />
 								<div>
-									<span>Dec: </span><br />
+									<span>Dec: </span>
 									<span id="subnet_of_this_ip_dec"></span><span
 										class="slashed_mask"></span></div>
 								<div id="subnet_of_this_ip_bin">
-									<div><span>Bin: </span></div>
+									<span>Bin: </span>
 									<span class="host_bits">
 										<span class="subnet_bits">
 											<span class="subnet_class_bits">
@@ -128,27 +156,7 @@
 									<span class="slashed_mask"></span>
 								</div>
 							</div>
-							<div id="subnet_mask">
-								<h3>Subnet Mask</h3>
-								<div id="mask_dec">
-									<span>Dec: </span>
-									<span></span>
-									<span class="slashed_mask"></span>
-								</div>
-								<div id="mask_bin">
-									<span>Bin: </span><br />
-									<span class="host_bits">
-										<span class="subnet_bits">
-											<span class="subnet_class_bits">
-												<span class="segment subnet_class_bits"></span>
-											</span>
-											<span class="segment subnet_bits"></span>
-										</span>
-										<span class="segment host_bits"></span>
-									</span>
-									<span class="slashed_mask"></span>
-								</div>
-							</div>
+							
 							<div id="summary">
 								<div id="bit_count">
 									<span class="subnet_class_bits">Class bits: <span></span></span>
@@ -214,6 +222,7 @@
 		__initialise__: function (){
 			this.bin = generateBinIp()
 		},
+		/* Basic shifting */
 		subnet_boundary_shift_left: function (iteration = 1) {
 			let current_iter = 0
 			while (this.subnet_bit_number > 0 && current_iter < iteration){
@@ -246,6 +255,7 @@
 				current_iter ++
 			}
 		},
+		/* Block shifting */
 		subnet_boundary_to_left_octet: function(){
 			if (this.get_subnet_mask_length() % OCTET_BITS && this.subnet_bit_number > 0){
 				this.subnet_boundary_shift_left(
@@ -283,6 +293,7 @@
 				this.class_boundary_shift_right(OCTET_BITS)
 			}
 		},
+		/* To-end shifting */
 		to_the_most_left_subnet_boundary: function(){
 			this.subnet_boundary_shift_left(this.subnet_bit_number)
 		},
@@ -294,6 +305,10 @@
 		},
 		to_the_most_right_class_boundary: function(){
 			this.class_boundary_shift_right(this.get_subnet_mask_length())
+		},
+		get_subnet_mask_length: function() {
+			/* The sum of class bits number and subnet capacity */
+			return this.class_bit_number + this.subnet_bit_number
 		},
 		get_subnet_mask: function () {
 			return subnet_mask ='0'.repeat(this.host_bit_number).padStart(32,'1')
@@ -331,10 +346,6 @@
 		to_dotted_bin: function(){
 			/* Return a string repr bin octet, separated by dot */
 			return this.to_bin_array().join(".")
-		},
-		get_subnet_mask_length: function() {
-			/* The sum of class bits number and subnet capacity */
-			return this.class_bit_number + this.subnet_bit_number
 		},
 		get_this_subnet_bin: function(){
 			/* Return a bin32 string */
