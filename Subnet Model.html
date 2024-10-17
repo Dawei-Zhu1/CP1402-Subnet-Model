@@ -48,19 +48,30 @@
 		#subnet_mask{
 			font-size: 24px;
 		}
+		kbd{
+			background: #eee;
+			border: 0.5px solid gray;
+			box-shadow: 0 2px 3px #aaa;
+			border-radius: 4px;
+			padding: 2px 4px;
+		}
 	</style>
 	<body>
 		<div id="container">
 			<h1>Subnet Example</h1>
 			<div id="example">
 				<div id="help">
-					<h2>Help</h2>
-					You may use <u>keyboard shortcuts</u> to move these boundaries:<br />
-					<strong>&lArr;</strong>: move custom subnet boundary left;<br />
-					<strong>&rArr;</strong>: move custom subnet boundary right;<br />
-					<strong>Q</strong>: move provided subnet boundary left ;<br />
-					<strong>D</strong>: move custom subnet boundary right;<br />
-					By Dawei Zhu
+					<section>
+						<h2>Help</h2>
+						You may use <u>keyboard shortcuts</u> to move these boundaries:<br />
+						<kbd>&lArr;</kbd><kbd>&rArr;</kbd>: subnet boundary shift;<br />
+						<kbd>A</kbd><kbd>D</kbd>: Class boundary shift;<br />
+					</section>
+					<section>
+						With holding:<br />
+						<kbd>Alt</kbd>/<kbd>&#8997;</kbd>: shift by block<br />
+						<kbd>Shift</kbd>/<kbd>&#8679;</kbd>: shift to start/end place<br />
+					</section>
 				</div>
 				<h2>IP</h2>
 				<div id="ipv4">
@@ -182,6 +193,10 @@
 				</div>
 			</div>
 		</div>
+		<footer>
+			<hr />
+			<span>By Dawei Zhu</span>
+		</footer>
 	</body>
 
 	<script type="text/javascript">
