@@ -213,7 +213,16 @@
 	IP_MAX_BITS = 32,
 	OCTET_BITS = 8,
 	LEAST_HOST_BITS = 2
-
+	const lang = {
+		monopoly: function(singular, quantity, alter){
+			/* Singular or plural.
+			For now this function is only for normal -s plural.
+			Use alter for irregular plural. */
+			if (quantity > 1){
+				return alter?alter:singular + "s"
+			} else return singular
+		}
+	}
 	var ip = {
 		bin: null,
 		class_bit_number: 16,
