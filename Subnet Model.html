@@ -424,8 +424,7 @@ Dec subnet: ${this.get_this_subnet_dec_array()}`)
 				ip.class_boundary_shift_left()
 			} else if (keyname == 'd'){
 				ip.class_boundary_shift_right()
-			} else
-			console.log(keyname, keycode, key_id)
+			} 
 			draw(ip)
 		}
 	)	
@@ -467,8 +466,8 @@ Dec subnet: ${this.get_this_subnet_dec_array()}`)
 		document.getElementById("summary").getElementsByClassName("host_bits")[0].getElementsByTagName("span")[0].innerText = ip.host_bit_number
 
 
-		document.getElementById("host_capacity").innerText = `2 ^ (host_bits) - 2 = ${2**ip.host_bit_number - 2}`
-		document.getElementById("subnet_capacity").innerText = `2 ^ (subnet_bits) = ${2**ip.subnet_bit_number} ` + ((ip.subnet_bit_number > 0)?"subnets":"network")
+		document.getElementById("host_capacity").innerText = `2^(${ip.host_bit_number} host_bits) - 2 = ${2**ip.host_bit_number - 2}`
+		document.getElementById("subnet_capacity").innerText = `2^(${ip.subnet_bit_number} ${lang.monopoly("subnet_bit", ip.subnet_bit_number)}) = ${2**ip.subnet_bit_number} ${lang.monopoly("network",2**ip.subnet_bit_number,"subnets")}`
 
 	}
 
