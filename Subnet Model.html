@@ -168,14 +168,14 @@
 							<div>
 								<label for="subnet_type"></label>
 								<input type="button" name="subnet_type" value="&lt;&lt;"
-									onclick="ip.to_the_most_left_provided_boundary();draw(ip)">
+									onclick="ip.to_the_most_left_class_boundary();draw(ip)">
 								<input type="button" name="subnet_type" value="&lt;"
-									onclick="ip.provided_boundary_shift_left();draw(ip)">
+									onclick="ip.class_boundary_shift_left();draw(ip)">
 								<span>Provider Subnet</span>
 								<input type="button" name="subnet_type" value=" &gt;"
-									onclick="ip.provided_boundary_shift_right();draw(ip)">
+									onclick="ip.class_boundary_shift_right();draw(ip)">
 								<input type="button" name="subnet_type" value="&gt;&gt;"
-									onclick="ip.to_the_most_right_provided_boundary();draw(ip)">
+									onclick="ip.to_the_most_right_class_boundary();draw(ip)">
 							</div>
 						</menu>
 					</div>
@@ -215,7 +215,7 @@
 				current_iter ++
 			}
 		},
-		provided_boundary_shift_left: function (iteration = 1) {
+		class_boundary_shift_left: function (iteration = 1) {
 			let current_iter = 0
 			while (this.class_bit_number > 0 && current_iter < iteration ){
 				this.class_bit_number --
@@ -223,7 +223,7 @@
 				current_iter ++
 			}
 		},
-		provided_boundary_shift_right: function (iteration = 1) {
+		class_boundary_shift_right: function (iteration = 1) {
 			let current_iter = 0
 			while (this.subnet_bit_number > 0 && current_iter < iteration){
 				this.class_bit_number ++
@@ -249,23 +249,23 @@
 		},
 		class_boundary_to_left_octet: function(){
 			if (this.class_bit_number % OCTET_BITS){
-				this.provided_boundary_shift_left(this.class_bit_number % OCTET_BITS)
+				this.class_boundary_shift_left(this.class_bit_number % OCTET_BITS)
 			} else {
-				this.provided_boundary_shift_left(OCTET_BITS)
+				this.class_boundary_shift_left(OCTET_BITS)
 			}
 		},
 		class_boundary_to_right_octet: function(){
 			if (this.class_bit_number % OCTET_BITS){
 				if (this.subnet_bit_number > 0){
 					// If right side space is enough
-					this.provided_boundary_shift_right(Math.ceil(
+					this.class_boundary_shift_right(Math.ceil(
 						this.class_bit_number/OCTET_BITS) * 8 - this.class_bit_number
 					)
 				} else {
-					this.to_the_most_right_provided_boundary()
+					this.to_the_most_right_class_boundary()
 				}
 			} else {
-				this.provided_boundary_shift_right(OCTET_BITS)
+				this.class_boundary_shift_right(OCTET_BITS)
 			}
 		},
 		to_the_most_left_subnet_boundary: function(){
@@ -274,11 +274,11 @@
 		to_the_most_right_subnet_boundary: function(){
 			this.subnet_boundary_shift_right(this.host_bit_number - 2)
 		},
-		to_the_most_left_provided_boundary: function(){
-			this.provided_boundary_shift_left(this.class_bit_number)
+		to_the_most_left_class_boundary: function(){
+			this.class_boundary_shift_left(this.class_bit_number)
 		},
-		to_the_most_right_provided_boundary: function(){
-			this.provided_boundary_shift_right(this.get_subnet_mask_length())
+		to_the_most_right_class_boundary: function(){
+			this.class_boundary_shift_right(this.get_subnet_mask_length())
 		},
 		get_subnet_mask: function () {
 			return subnet_mask ='0'.repeat(this.host_bit_number).padStart(32,'1')
@@ -366,9 +366,9 @@ Dec subnet: ${this.get_this_subnet_dec_array()}`)
 			} else if (event.shiftKey && keyname === "ArrowRight") {
 				ip.to_the_most_right_subnet_boundary()
 			} else if (event.shiftKey && keyname === 'A') {
-				ip.to_the_most_left_provided_boundary()
+				ip.to_the_most_left_class_boundary()
 			} else if (event.shiftKey && keyname === 'D') {
-				ip.to_the_most_right_provided_boundary()
+				ip.to_the_most_right_class_boundary()
 			} else
 			// Alt + keyname, move to the boundary of octet
 			if (event.altKey && keyname === 'ArrowLeft') {
@@ -386,9 +386,9 @@ Dec subnet: ${this.get_this_subnet_dec_array()}`)
 			} else if (keyname == 'ArrowRight'){
 				ip.subnet_boundary_shift_right()
 			} else if (keyname == 'a'){
-				ip.provided_boundary_shift_left()
+				ip.class_boundary_shift_left()
 			} else if (keyname == 'd'){
-				ip.provided_boundary_shift_right()
+				ip.class_boundary_shift_right()
 			} else
 			console.log(keyname, keycode, key_id)
 			draw(ip)
