@@ -256,9 +256,11 @@
 		},
 		class_boundary_to_right_octet: function(){
 			if (this.class_bit_number % OCTET_BITS){
-				if (this.subnet_bit_number > OCTET_BITS){
+				if (this.subnet_bit_number > 0){
 					// If right side space is enough
-					
+					this.provided_boundary_shift_right(Math.ceil(
+						this.class_bit_number/OCTET_BITS) * 8 - this.class_bit_number
+					)
 				} else {
 					this.to_the_most_right_provided_boundary()
 				}
