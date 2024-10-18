@@ -521,7 +521,7 @@ Dec subnet: ${this.get_this_subnet_dec_array()}`)
 
 	function binStrToDecNum(int_str){
 		/* String binary to decimal number */
-		return parseInt(int_str, 2)
+		return parseInt(int_str, 2) >>> 0
 	}
 	function bin32_to_bin_array(bin_32){
 		/* Devide 32 bit bin-in-str to 4 octets */
