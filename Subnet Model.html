@@ -547,12 +547,12 @@ Dec subnet: ${this.get_this_subnet_dec_array()}`)
 		/* Return an 8-bit bin style string */
 		let _ip_binary_octets = []
 		for (let each_octet of ip_blocks){
-			_ip_binary_octets.push(dec_to_8bit_bin(each_octet))
+			_ip_binary_octets.push(dec_to_nbit_bin(each_octet))
 		}
 		return _ip_binary_octets
 	}
-	function dec_to_8bit_bin(dec_num){
-		return dec_num.toString(2).padStart(OCTET_BITS, "0")
+	function dec_to_nbit_bin(dec_num, bit_len=OCTET_BITS){
+		return dec_num.toString(2).padStart(bit_len, "0")
 	}
 	function insert_at_index(text, insertion, index){
 		/* Insert after index. */
