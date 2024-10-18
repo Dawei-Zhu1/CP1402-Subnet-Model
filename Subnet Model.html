@@ -174,27 +174,27 @@
 							<div>
 								<label for="subnet_type"></label>
 								<input type="button" name="subnet_type" value="&lt;&lt;"
-									onclick="ip.to_the_most_left_subnet_boundary();draw(ip)">
+									onclick="ip.subnet_boundary_far_left_shift();draw(ip)">
 								<input type="button" name="subnet_type" value="&lt;"
 									onclick="ip.subnet_boundary_shift_left();draw(ip)">
 								<span>Subnet</span>
 								<input type="button" name="subnet_type" value="&gt;"
 									onclick="ip.subnet_boundary_shift_right(),draw(ip)">
 								<input type="button" name="subnet_type" value="&gt;&gt;"
-									onclick="ip.to_the_most_right_subnet_boundary(),draw(ip)">
+									onclick="ip.subnet_boundary_far_right_shift(),draw(ip)">
 
 							</div>
 							<div>
 								<label for="subnet_type"></label>
 								<input type="button" name="subnet_type" value="&lt;&lt;"
-									onclick="ip.to_the_most_left_class_boundary();draw(ip)">
+									onclick="ip.class_boundary_far_left_shift();draw(ip)">
 								<input type="button" name="subnet_type" value="&lt;"
 									onclick="ip.class_boundary_shift_left();draw(ip)">
 								<span>Provider Subnet</span>
 								<input type="button" name="subnet_type" value=" &gt;"
 									onclick="ip.class_boundary_shift_right();draw(ip)">
 								<input type="button" name="subnet_type" value="&gt;&gt;"
-									onclick="ip.to_the_most_right_class_boundary();draw(ip)">
+									onclick="ip.class_boundary_far_right_shift();draw(ip)">
 							</div>
 						</menu>
 					</div>
@@ -267,9 +267,9 @@
 		/* Block shifting */
 		subnet_boundary_to_left_octet: function(){
 			if (this.get_subnet_mask_length() % OCTET_BITS && this.subnet_bit_number > 0){
-				this.subnet_boundary_shift_left(
+			this.subnet_boundary_shift_left(
 					this.get_subnet_mask_length() - Math.floor(this.get_subnet_mask_length()/8)*8
-				)
+			)
 			} else {
 				this.subnet_boundary_shift_left(OCTET_BITS)
 			}
@@ -296,31 +296,39 @@
 						this.class_bit_number/OCTET_BITS) * 8 - this.class_bit_number
 					)
 				} else {
-					this.to_the_most_right_class_boundary()
+					this.class_boundary_far_right_shift()
 				}
 			} else {
 				this.class_boundary_shift_right(OCTET_BITS)
 			}
 		},
 		/* To-end shifting */
-		to_the_most_left_subnet_boundary: function(){
+		subnet_boundary_far_left_shift: function(){
 			this.subnet_boundary_shift_left(this.subnet_bit_number)
 		},
-		to_the_most_right_subnet_boundary: function(){
+		subnet_boundary_far_right_shift: function(){
 			this.subnet_boundary_shift_right(this.host_bit_number - 2)
 		},
-		to_the_most_left_class_boundary: function(){
+		class_boundary_far_left_shift: function(){
 			this.class_boundary_shift_left(this.class_bit_number)
 		},
-		to_the_most_right_class_boundary: function(){
+		class_boundary_far_right_shift: function(){
 			this.class_boundary_shift_right(this.get_subnet_mask_length())
 		},
+		/* IP manipulation */
+		
+		/* Data */
 		get_subnet_mask_length: function() {
 			/* The sum of class bits number and subnet capacity */
 			return this.class_bit_number + this.subnet_bit_number
 		},
 		get_subnet_mask: function () {
+			/* Return a bin32 like str */
 			return subnet_mask ='0'.repeat(this.host_bit_number).padStart(32,'1')
+		},
+		get_subnet_mask_dec_array: function () {
+			/* Return an array with 4 decimal numbers */
+			return bin32_to_dec_array(this.get_subnet_mask())
 		},
 		slice_dotted_bin_by_boundaries: function(dotted_bin){
 			/* 
@@ -373,6 +381,7 @@
 		get_this_subnet_dec_array: function(){
 			return bin32_to_dec_array(this.get_this_subnet_bin())
 		},
+		/* Debug */
 		show: function () {
 			/* Debug */
 			console.log(
@@ -397,13 +406,13 @@ Dec subnet: ${this.get_this_subnet_dec_array()}`)
 			event.preventDefault()
 			// Shift + keyname
 			if (event.shiftKey && keyname === "ArrowLeft") {
-				ip.to_the_most_left_subnet_boundary()
+				ip.subnet_boundary_far_left_shift()
 			} else if (event.shiftKey && keyname === "ArrowRight") {
-				ip.to_the_most_right_subnet_boundary()
+				ip.subnet_boundary_far_right_shift()
 			} else if (event.shiftKey && keyname === 'A') {
-				ip.to_the_most_left_class_boundary()
+				ip.class_boundary_far_left_shift()
 			} else if (event.shiftKey && keyname === 'D') {
-				ip.to_the_most_right_class_boundary()
+				ip.class_boundary_far_right_shift()
 			} else
 			// Alt + keyname, move to the boundary of octet
 			if (event.altKey && keyname === 'ArrowLeft') {
@@ -448,7 +457,7 @@ Dec subnet: ${this.get_this_subnet_dec_array()}`)
 			document.getElementById("subnet_of_this_ip_bin").getElementsByClassName("segment")[index].innerText = segment
 		}
 		// Subnet mask
-		document.getElementById("mask_dec").getElementsByTagName("span")[1].innerText = ip.get_this_subnet_dec_array().join(".")
+		document.getElementById("mask_dec").getElementsByTagName("span")[1].innerText = ip.get_subnet_mask_dec_array().join(".")
 		let dotted_subnet_mask = bin32_to_bin_array(ip.get_subnet_mask()).join(".")
 		for (let [index, segment] of ip.slice_dotted_bin_by_boundaries(dotted_subnet_mask).entries()){
 			document.getElementById("mask_bin").getElementsByClassName("segment")[index].innerText = segment
