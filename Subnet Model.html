@@ -316,7 +316,13 @@
 			this.class_boundary_shift_right(this.get_subnet_mask_length())
 		},
 		/* IP manipulation */
-		
+		set_ip: function(){},
+		host_bit_increase: function(increment){
+			let _mutable_bits = this._get_non_class_bits()
+			let bit_len = _mutable_bits.length
+			let _value = binStrToDecNum(_mutable_bits)
+			
+		},
 		/* Data */
 		get_subnet_mask_length: function() {
 			/* The sum of class bits number and subnet capacity */
@@ -324,7 +330,13 @@
 		},
 		get_subnet_mask: function () {
 			/* Return a bin32 like str */
-			return subnet_mask ='0'.repeat(this.host_bit_number).padStart(32,'1')
+			return '0'.repeat(this.host_bit_number).padStart(IP_MAX_BITS,'1')
+		},
+		get_class_mask: function(){
+			return '1'.repeat(this.class_bit_number).padEnd(IP_MAX_BITS, '0')
+		},
+		_get_non_class_bits: function(){
+			return _mutable_bits = bit_and(this.get_class_mask(), this.bin)
 		},
 		get_subnet_mask_dec_array: function () {
 			/* Return an array with 4 decimal numbers */
@@ -523,6 +535,7 @@ Dec subnet: ${this.get_this_subnet_dec_array()}`)
 		/* String binary to decimal number */
 		return parseInt(int_str, 2) >>> 0
 	}
+
 	function bin32_to_bin_array(bin_32){
 		/* Devide 32 bit bin-in-str to 4 octets */
 		let result = []
@@ -533,8 +546,6 @@ Dec subnet: ${this.get_this_subnet_dec_array()}`)
 		return result
 	}
 
-	
-	
 	function bin_array_to_dec_array(four_octets){
 		/* Convert literal bin ip to decimal ip */
 		let result = []
@@ -543,6 +554,7 @@ Dec subnet: ${this.get_this_subnet_dec_array()}`)
 		}
 		return result
 	}
+
 	function dec_array_to_bin_array(ip_blocks){
 		/* Return an 8-bit bin style string */
 		let _ip_binary_octets = []
@@ -551,9 +563,11 @@ Dec subnet: ${this.get_this_subnet_dec_array()}`)
 		}
 		return _ip_binary_octets
 	}
+
 	function dec_to_nbit_bin(dec_num, bit_len=OCTET_BITS){
 		return dec_num.toString(2).padStart(bit_len, "0")
 	}
+	
 	function insert_at_index(text, insertion, index){
 		/* Insert after index. */
 		let _text = text
