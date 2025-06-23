@@ -27,11 +27,11 @@ export function draw(ip) {
     }
     /* Mask */
     document.getElementById("mask_dec").getElementsByTagName('span')[1].innerText = ip.get_subnet_mask().join('.')
-
     // Insert binary mask
-    // for (let [index, each_part] of ip.get_subnet_mask().entries()) {
-    //     document.getElementById("mask_bin").getElementsByClassName("octet")[index].innerText = each_part
-    // }
+    console.log(ip.get_mask_segments())
+    for (let [index, each_part] of ip.get_mask_segments().entries()) {
+        document.getElementById("mask_bin").getElementsByClassName("segment")[index].innerText = each_part
+    }
 
     /* These features occupy to much memory */
     // // First Subnet address
@@ -45,5 +45,6 @@ export function draw(ip) {
     document.getElementById("subnet_capacity").innerHTML = `2 ^ (${ip.get_subnet_bit_length()}) = ${2 ** ip.get_subnet_bit_length()}`
     document.getElementById("host_capacity").innerHTML = `2 ^ (${ip.get_host_bit_length()}) - 2 = ${2 ** ip.get_host_bit_length() - 2}`
     ip.get_subnet_mask()
-    // console.log(ip.get_class_range())
+
+
 }

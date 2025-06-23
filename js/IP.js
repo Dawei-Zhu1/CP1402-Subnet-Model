@@ -35,19 +35,18 @@ export class IP {
         return octet.toString(2).padStart(CONSTANTS.OCTET_LEN, "0")
     }
 
-
-    to_bin32(ip) {
-        /* Get 4 ip octets then concatenate them */
-        let bin32ip_raw = []
-        for (const octet of ip ?? this.decimals) {
-            bin32ip_raw.push(this._dec_to_bin8(octet))
+    to_bin32(ip = this.decimals) {
+        /* Transform to 4 ip octets in binary form */
+        let raw_ip = ip
+        let bin32ip = []
+        for (const octet of raw_ip) {
+            bin32ip.push(this._dec_to_bin8(octet))
         }
-        return bin32ip_raw
+        return bin32ip
     }
 
-    get_ip_segment(ip) {
-        let _ip32 = ip ?? this.to_bin32()
-        let ip_raw = _ip32.join('')
+    get_ip_segment(ip = this.to_bin32()) {
+        let ip_raw = ip.join('')
         // Start looping
         let formatted_ip = []
         let segment = ''
@@ -57,6 +56,7 @@ export class IP {
                 current_bit += '.'
             }
             segment += current_bit
+            // Check whether has touched the boundaries
             if (this.boundaries.includes(pos) || pos === CONSTANTS.IP_MAX_LEN - 1) {
                 formatted_ip.push(segment)
                 segment = ''
@@ -96,5 +96,14 @@ export class IP {
             mask[octet_pos] = (2 ** partial_mask - 1) << offset
         }
         return mask
+    }
+
+    get_subnet_mask_bin32() {
+        let subnet_mask = this.get_subnet_mask()
+        return this.to_bin32(subnet_mask)
+    }
+
+    get_mask_segments() {
+        return this.get_ip_segment(this.get_subnet_mask_bin32())
     }
 }
