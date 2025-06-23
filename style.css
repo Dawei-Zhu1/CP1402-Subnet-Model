@@ -1,0 +1,48 @@
+* {
+    /* padding: 0;
+    margin: 0; */
+}
+
+html {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#ipv4 {
+    /* font-size: 0px;text-align: center; */
+}
+
+#ipv4 span {
+    font-size: 24px;
+    display: inline;
+    height: 32px;
+    text-align: center;
+    padding: 0 2.5px;
+
+}
+
+.ip_class_bits {
+    color: burlywood;
+    font-weight: lighter;
+    background-color: darkmagenta;
+}
+
+.subnet_bits {
+    color: red;
+    background-color: lightgreen;
+
+}
+
+.host_bits {
+    color: blueviolet;
+    font-weight: bold;
+    background-color: gold;
+}
+
+#subnet_mask {
+    font-size: 24px;
+
+}
+
+#console {
+    text-align: center;
+}

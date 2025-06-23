@@ -1,130 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="author" content="Dawei Zhu">
-		<meta name="version" content="v2.0">
-		<title>Subnet Example</title>
-	</head>
-	<style>
-		/* * {
-			padding: 0;
-			margin: 0;
-		} */
-		html{
-			font-family: 'Courier New', Courier, monospace;
-		}
-		/* #ipv4{
-			font-size: 0px;text-align: center;
-		} */
-		#ipv4 span{
-			font-size: 24px;
-			display: inline-flex;
-		}
-		#ip_bin>*,
-		#mask_bin>*,
-		#subnet_of_this_ip_bin>*{
-			vertical-align: middle;
-		}
-		.segment{
-			min-width: 1px;
-		}
-		.subnet_class_bits {
-			color:burlywood;
-			font-weight: lighter;
-			background-color:darkmagenta;
-		}
-		.subnet_bits {
-			color: red;
-			background-color: greenyellow;
-			/* text-decoration: underline; */
-		}
-		.host_bits {
-			color: blueviolet;
-			font-weight: bold;
-			background-color: orange;
-			/* vertical-align: middle; */
-		}
-		#subnet_mask{
-			font-size: 24px;
-		}
-		.class_bit_mask{
-			color: #fff;
-			background:#000 ;
-		}
-		.subnet_bit_mask{
-			background: #888;
-			color:#fff;
-		}
-		kbd{
-			background: #eee;
-			border: 0.5px solid gray;
-			box-shadow: 0 2px 3px #aaa;
-			border-radius: 4px;
-			padding: 2px 4px;
-		}
-	</style>
-	<body>
-		<div id="container">
-			<h1>Subnet Example</h1>
-			<div id="example">
-				<div id="help">
-					<section>
-						<h2>Help</h2>
-						You may use <u>keyboard shortcuts</u> to move these boundaries:<br />
-						<kbd>&lArr;</kbd><kbd>&rArr;</kbd>: subnet boundary shift;<br />
-						<kbd>A</kbd><kbd>D</kbd>: Class boundary shift;<br />
-					</section>
-					<section>
-						With holding:<br />
-						<kbd>Alt</kbd>/<kbd>&#8997;</kbd>: shift by block<br />
-						<kbd>Shift</kbd>/<kbd>&#8679;</kbd>: shift to start/end place<br />
-					</section>
-				</div>
-				<h2>Random IP</h2>
-				<div id="ipv4">
-					<div id="ip_dec">
-						<span>Dec: </span>
-						<span class="octet"></span>
-						<span class="ip_seperator">.</span>
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="Dawei Zhu">
+    <meta name="version" content="v2.0">
+    <title>Subnet Example</title>
+</head>
+<link rel="stylesheet" href="style.css">
+<body>
+<div id="container">
+    <h1>Subnet Example</h1>
+    <div id="example">
+        <div id="help">
+            <section>
+                <h2>Help</h2>
+                You may use <u>keyboard shortcuts</u> to move these boundaries:<br/>
+                <kbd>&lArr;</kbd><kbd>&rArr;</kbd>: subnet boundary shift;<br/>
+                <kbd>A</kbd><kbd>D</kbd>: Class boundary shift;<br/>
+            </section>
+            <section>
+                With holding:<br/>
+                <kbd>Alt</kbd>/<kbd>&#8997;</kbd>: shift by block<br/>
+                <kbd>Shift</kbd>/<kbd>&#8679;</kbd>: shift to start/end place<br/>
+            </section>
+        </div>
+        <h2>Random IP</h2>
+        <div id="ipv4">
+            <div id="ip_dec">
+                <span>Dec: </span>
+                <span class="octet"></span>
+                <span class="ip_separator">.</span>
 
-						<span class="octet"></span>
-						<span class="ip_seperator">.</span>
+                <span class="octet"></span>
+                <span class="ip_separator">.</span>
 
-						<span class="octet"></span>
-						<span class="ip_seperator">.</span>
+                <span class="octet"></span>
+                <span class="ip_separator">.</span>
 
-						<span class="octet"></span>
-						<span class="slashed_mask"></span>
-					</div>
-					<div id="ip_bin">
-						<span>Bin: </span>
-						<span class="host_bits">
+                <span class="octet"></span>
+                <span class="slashed_mask"></span>
+            </div>
+            <div id="ip_bin">
+                <span>Bin: </span>
+                <span class="host_bits">
 							<span class="subnet_bits">
 								<span class="subnet_class_bits">
-									<span class="segment subnet_class_bits"></span>
+									<span class="segment ip_class_bits">1</span>
 								</span>
-								<span class="segment subnet_bits"></span>
+								<span class="segment subnet_bits">a</span>
 							</span>
-							<span class="segment host_bits"></span>
+							<span class="segment host_bits">a</span>
 						</span>
-						<span class="slashed_mask"></span>
+                <span class="slashed_mask"></span>
 
-					</div>
-					<div id='dashboard'>
-						<div id="info">
-							<h2>Subnet Info</h2>
-							<div id="subnet_info">
-								<div id="subnet_mask">
-									<h3>Subnet Mask</h3>
-									<div id="mask_dec">
-										<span>Dec: </span>
-										<span></span>
-										<span class="slashed_mask"></span>
-									</div>
-									<div id="mask_bin">
-										<span>Bin: </span>
-										<span class="host_bits">
+            </div>
+            <div id='dashboard'>
+                <div id="info">
+                    <h2>Subnet Info</h2>
+                    <div id="subnet_info">
+                        <div id="subnet_mask">
+                            <h3>Subnet Mask</h3>
+                            <div id="mask_dec">
+                                <span>Dec: </span>
+                                <span></span>
+                                <span class="slashed_mask"></span>
+                            </div>
+                            <div id="mask_bin">
+                                <span>Bin: </span>
+                                <span class="host_bits">
 											<span class="subnet_bit_mask">
 												<span class="class_bit_mask">
 													<span class="segment class_bit_mask"></span>
@@ -133,18 +76,18 @@
 											</span>
 											<span class="segment host_bits"></span>
 										</span>
-										<span class="slashed_mask"></span>
-									</div>
-								</div>
+                                <span class="slashed_mask"></span>
+                            </div>
+                        </div>
 
-								<span>The random IP belongs to this subnet:</span><br />
-								<div>
-									<span>Dec: </span>
-									<span id="subnet_of_this_ip_dec"></span><span
-										class="slashed_mask"></span></div>
-								<div id="subnet_of_this_ip_bin">
-									<span>Bin: </span>
-									<span class="host_bits">
+                        <span>The random IP belongs to this subnet:</span><br/>
+                        <div>
+                            <span>Dec: </span>
+                            <span id="subnet_of_this_ip_dec"></span><span
+                                class="slashed_mask"></span></div>
+                        <div id="subnet_of_this_ip_bin">
+                            <span>Bin: </span>
+                            <span class="host_bits">
 										<span class="subnet_bits">
 											<span class="subnet_class_bits">
 												<span class="segment subnet_class_bits"></span>
@@ -153,441 +96,63 @@
 										</span>
 										<span class="segment host_bits"></span>
 									</span>
-									<span class="slashed_mask"></span>
-								</div>
-							</div>
-							
-							<div id="summary">
-								<div id="bit_count">
-									<span class="subnet_class_bits">Class bits: <span></span></span>
-									<span class="subnet_bits">Subnet bits: <span></span></span>
-									<span class="host_bits">host bits: <span></span></span><br />
-								</div>
-								<span>This subnet can hold <span id="host_capacity"
-										class="host_bits"></span> hosts.</span><br />
-								<span>This network can hold <span id="subnet_capacity"
-										class="subnet_bits"></span>.</span>
+                            <span class="slashed_mask"></span>
+                        </div>
+                    </div>
 
-							</div>
-						</div>
-						<menu id="console">
-							<div>
-								<label for="subnet_type"></label>
-								<input type="button" name="subnet_type" value="&lt;&lt;"
-									onclick="ip.subnet_boundary_far_left_shift();draw(ip)">
-								<input type="button" name="subnet_type" value="&lt;"
-									onclick="ip.subnet_boundary_shift_left();draw(ip)">
-								<span>Subnet</span>
-								<input type="button" name="subnet_type" value="&gt;"
-									onclick="ip.subnet_boundary_shift_right(),draw(ip)">
-								<input type="button" name="subnet_type" value="&gt;&gt;"
-									onclick="ip.subnet_boundary_far_right_shift(),draw(ip)">
-
-							</div>
-							<div>
-								<label for="subnet_type"></label>
-								<input type="button" name="subnet_type" value="&lt;&lt;"
-									onclick="ip.class_boundary_far_left_shift();draw(ip)">
-								<input type="button" name="subnet_type" value="&lt;"
-									onclick="ip.class_boundary_shift_left();draw(ip)">
-								<span>Provider Subnet</span>
-								<input type="button" name="subnet_type" value=" &gt;"
-									onclick="ip.class_boundary_shift_right();draw(ip)">
-								<input type="button" name="subnet_type" value="&gt;&gt;"
-									onclick="ip.class_boundary_far_right_shift();draw(ip)">
-							</div>
-						</menu>
-					</div>
-				</div>
-			</div>
-		</div>
-		<footer>
-			<hr />
-			<span>By Dawei Zhu</span>
-		</footer>
-	</body>
-
-	<script type="text/javascript">
-	const IP_OCTET_QTY = 4,
-	IP_BEGIN_INDEX = 0,
-	IP_MAX_BITS = 32,
-	OCTET_BITS = 8,
-	LEAST_HOST_BITS = 2
-	const lang = {
-		monopoly: function(singular, quantity, alter){
-			/* Singular or plural.
-			For now this function is only for normal -s plural.
-			Use alter for irregular plural. */
-			if (quantity > 1){
-				return alter?alter:singular + "s"
-			} else return singular
-		}
-	}
-	var ip = {
-		bin: null,
-		class_bit_number: 16,
-		subnet_bit_number: 8,
-		host_bit_number: 8,
-		__initialise__: function (){
-			this.bin = generateBinIp()
-		},
-		/* Basic shifting */
-		subnet_boundary_shift_left: function (iteration = 1) {
-			let current_iter = 0
-			while (this.subnet_bit_number > 0 && current_iter < iteration){
-				this.subnet_bit_number --
-				this.host_bit_number ++
-				current_iter ++
-			}
-		},
-		subnet_boundary_shift_right: function (iteration = 1) {
-			let current_iter = 0
-			while (this.host_bit_number > LEAST_HOST_BITS && current_iter < iteration){
-				this.subnet_bit_number ++
-				this.host_bit_number --
-				current_iter ++
-			}
-		},
-		class_boundary_shift_left: function (iteration = 1) {
-			let current_iter = 0
-			while (this.class_bit_number > 0 && current_iter < iteration ){
-				this.class_bit_number --
-				this.subnet_bit_number ++
-				current_iter ++
-			}
-		},
-		class_boundary_shift_right: function (iteration = 1) {
-			let current_iter = 0
-			while (this.subnet_bit_number > 0 && current_iter < iteration){
-				this.class_bit_number ++
-				this.subnet_bit_number --
-				current_iter ++
-			}
-		},
-		/* Block shifting */
-		subnet_boundary_to_left_octet: function(){
-			if (this.get_subnet_mask_length() % OCTET_BITS && this.subnet_bit_number > 0){
-			this.subnet_boundary_shift_left(
-					this.get_subnet_mask_length() - Math.floor(this.get_subnet_mask_length()/8)*8
-			)
-			} else {
-				this.subnet_boundary_shift_left(OCTET_BITS)
-			}
-		},
-		subnet_boundary_to_right_octet: function(){
-			if (this.host_bit_number % OCTET_BITS){
-				this.subnet_boundary_shift_right(this.host_bit_number % OCTET_BITS)
-			} else {
-				this.subnet_boundary_shift_right(OCTET_BITS)
-			}
-		},
-		class_boundary_to_left_octet: function(){
-			if (this.class_bit_number % OCTET_BITS){
-				this.class_boundary_shift_left(this.class_bit_number % OCTET_BITS)
-			} else {
-				this.class_boundary_shift_left(OCTET_BITS)
-			}
-		},
-		class_boundary_to_right_octet: function(){
-			if (this.class_bit_number % OCTET_BITS){
-				if (this.subnet_bit_number > 0){
-					// If right side space is enough
-					this.class_boundary_shift_right(Math.ceil(
-						this.class_bit_number/OCTET_BITS) * 8 - this.class_bit_number
-					)
-				} else {
-					this.class_boundary_far_right_shift()
-				}
-			} else {
-				this.class_boundary_shift_right(OCTET_BITS)
-			}
-		},
-		/* To-end shifting */
-		subnet_boundary_far_left_shift: function(){
-			this.subnet_boundary_shift_left(this.subnet_bit_number)
-		},
-		subnet_boundary_far_right_shift: function(){
-			this.subnet_boundary_shift_right(this.host_bit_number - 2)
-		},
-		class_boundary_far_left_shift: function(){
-			this.class_boundary_shift_left(this.class_bit_number)
-		},
-		class_boundary_far_right_shift: function(){
-			this.class_boundary_shift_right(this.get_subnet_mask_length())
-		},
-		/* IP manipulation */
-		set_ip: function(){},
-		host_bit_increase: function(increment){
-			let _mutable_bits = this._get_non_class_bits()
-			let bit_len = _mutable_bits.length
-			let _value = binStrToDecNum(_mutable_bits)
-			
-		},
-		/* Data */
-		get_subnet_mask_length: function() {
-			/* The sum of class bits number and subnet capacity */
-			return this.class_bit_number + this.subnet_bit_number
-		},
-		get_subnet_mask: function () {
-			/* Return a bin32 like str */
-			return '0'.repeat(this.host_bit_number).padStart(IP_MAX_BITS,'1')
-		},
-		get_class_mask: function(){
-			return '1'.repeat(this.class_bit_number).padEnd(IP_MAX_BITS, '0')
-		},
-		_get_non_class_bits: function(){
-			return _mutable_bits = bit_and(this.get_class_mask(), this.bin)
-		},
-		get_subnet_mask_dec_array: function () {
-			/* Return an array with 4 decimal numbers */
-			return bin32_to_dec_array(this.get_subnet_mask())
-		},
-		slice_dotted_bin_by_boundaries: function(dotted_bin){
-			/* 
-			Return an array of 3 components, sliced by 2 boundaries
-		
-			 */
-			let formatted_bin = dotted_bin
-			let provided_network_bits = formatted_bin.slice(
-				0, 
-				index_offset_with_formatted_ip(this.class_bit_number) 
-			)
-			let subnet_network_bits = formatted_bin.slice(
-				index_offset_with_formatted_ip(this.class_bit_number), 
-				index_offset_with_formatted_ip(this.get_subnet_mask_length())
-			)
-			let host_bits = formatted_bin.slice(
-				index_offset_with_formatted_ip(this.get_subnet_mask_length())
-			)
-			return [provided_network_bits, subnet_network_bits, host_bits]
-		},
-		get_sliced_dotted_bin_ip: function () {
-			return this.slice_dotted_bin_by_boundaries(this.to_dotted_bin())
-		},
-		to_bin_array: function(){
-			/* Return an array of 4 numbers */
-			return bin32_to_bin_array(this.bin)
-		},
-		to_dec_array: function(){
-			/* IP in dec, in a 4-part array */
-			return bin32_to_dec_array(this.bin)
-		},
-		to_dotted_bin: function(){
-			/* Return a string repr bin octet, separated by dot */
-			return this.to_bin_array().join(".")
-		},
-		get_this_subnet_bin: function(){
-			/* Return a bin32 string */
-			let _subnet_mask = bin32_to_dec_array(this.get_subnet_mask()) 
-			let _ip_bin_octets = bin32_to_dec_array(this.bin)
-			let result_decimals = []
-			for (let [index, subnet_octet] of _subnet_mask.entries()){
-				let bit_and = subnet_octet & _ip_bin_octets[index]
-				result_decimals.push(bit_and)
-			}
-			return dec_array_to_bin32(result_decimals)
-		},
-		get_this_subnet_bin_array: function(){
-			return bin32_to_bin_array(this.get_this_subnet_bin())
-		},
-		get_this_subnet_dec_array: function(){
-			return bin32_to_dec_array(this.get_this_subnet_bin())
-		},
-		/* Debug */
-		show: function () {
-			/* Debug */
-			console.log(
-			`IP: ${this.to_dotted_bin()};
-Dec: ${this.to_dec_array()};
-Class: ${this.class_bit_number};
-Subnet cap: ${this.subnet_bit_number};
-Host cap: ${this.host_bit_number};
-Subnet Mask: ${this.get_subnet_mask()};
-Bin subnet: ${this.get_this_subnet_bin_array()};
-Dec subnet: ${this.get_this_subnet_dec_array()}`)
-		}
-	}
-	ip.__initialise__()
-	draw(ip)
-	// SHORTCUTS
-	document.addEventListener('keydown', 
-		(event)=>{
-			let keyname = event.key
-			let keycode = event.code
-			let key_id = event.which
-			event.preventDefault()
-			// Shift + keyname
-			if (event.shiftKey && keyname === "ArrowLeft") {
-				ip.subnet_boundary_far_left_shift()
-			} else if (event.shiftKey && keyname === "ArrowRight") {
-				ip.subnet_boundary_far_right_shift()
-			} else if (event.shiftKey && keyname === 'A') {
-				ip.class_boundary_far_left_shift()
-			} else if (event.shiftKey && keyname === 'D') {
-				ip.class_boundary_far_right_shift()
-			} else
-			// Alt + keyname, move to the boundary of octet
-			if (event.altKey && keyname === 'ArrowLeft') {
-				ip.subnet_boundary_to_left_octet()
-			} else if (event.altKey && keyname === 'ArrowRight') {
-				ip.subnet_boundary_to_right_octet()
-			} else if (event.altKey && key_id === 65) {
-				ip.class_boundary_to_left_octet()
-			} else if (event.altKey && key_id === 68) {
-				ip.class_boundary_to_right_octet()
-			}else
-			// Single key
-			if (keyname == 'ArrowLeft'){
-				ip.subnet_boundary_shift_left()
-			} else if (keyname == 'ArrowRight'){
-				ip.subnet_boundary_shift_right()
-			} else if (keyname == 'a'){
-				ip.class_boundary_shift_left()
-			} else if (keyname == 'd'){
-				ip.class_boundary_shift_right()
-			} 
-			draw(ip)
-		}
-	)	
+                    <div id="summary">
+                        <div id="bit_count">
+                            <span class="subnet_class_bits">Class bits: <span></span></span>
+                            <span class="subnet_bits">Subnet bits: <span id="subnet_count"></span></span>
+                            <span class="host_bits">host bits: <span id="host_count"></span></span><br/>
+                        </div>
+                        <span>This network can hold <span id="subnet_capacity"
+                                                          class="subnet_bits"></span> subnets.</span>
+                        <span>This subnet can hold <span id="host_capacity"
+                                                         class="host_bits"></span> hosts.</span><br/>
 
 
-	function draw(ip){
-		// insert decimal ip into html
-		for (let [index, octet] of ip.to_dec_array().entries()){
-			document.getElementById("ip_dec").getElementsByClassName("octet")[index].innerText = octet.toString()
-		}
-		// insert 3-segment binary 
-		for (let [index, fragment] of ip.get_sliced_dotted_bin_ip().entries()){
-			document.getElementById("ip_bin").getElementsByClassName("segment")[index].innerText = fragment
-		}
+                    </div>
+                </div>
+                <menu id="console">
+                    <div>
+                        <label for="subnet_type"></label>
+                        <input type="button" name="subnet_type" value="&lt;&lt;"
+                               onclick="ip.subnet_boundary_far_left_shift();draw(ip)">
+                        <input type="button" name="subnet_type" value="&lt;"
+                               onclick="ip.subnet_boundary_shift_left();draw(ip)">
+                        <span>Subnet</span>
+                        <input type="button" name="subnet_type" value="&gt;"
+                               onclick="ip.subnet_boundary_shift_right(),draw(ip)">
+                        <input type="button" name="subnet_type" value="&gt;&gt;"
+                               onclick="ip.subnet_boundary_far_right_shift(),draw(ip)">
 
-		// Subnet info
-		document.getElementById("subnet_of_this_ip_dec").innerText = ip.get_this_subnet_dec_array().join(".")
+                    </div>
+                    <div>
+                        <label for="subnet_type"></label>
+                        <input type="button" name="subnet_type" value="&lt;&lt;"
+                               onclick="ip.class_boundary_far_left_shift();draw(ip)">
+                        <input type="button" name="subnet_type" value="&lt;"
+                               onclick="ip.class_boundary_shift_left();draw(ip)">
+                        <span>Provider Subnet</span>
+                        <input type="button" name="subnet_type" value=" &gt;"
+                               onclick="ip.class_boundary_shift_right();draw(ip)">
+                        <input type="button" name="subnet_type" value="&gt;&gt;"
+                               onclick="ip.class_boundary_far_right_shift();draw(ip)">
+                    </div>
+                </menu>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    <hr/>
+    <span>By Dawei Zhu</span>
+</footer>
+</body>
 
-		let this_dotted_subnet = ip.get_this_subnet_bin_array().join(".")
-		for (let [index, segment] of ip.slice_dotted_bin_by_boundaries(this_dotted_subnet).entries()) {
-			document.getElementById("subnet_of_this_ip_bin").getElementsByClassName("segment")[index].innerText = segment
-		}
-		// Subnet mask
-		document.getElementById("mask_dec").getElementsByTagName("span")[1].innerText = ip.get_subnet_mask_dec_array().join(".")
-		let dotted_subnet_mask = bin32_to_bin_array(ip.get_subnet_mask()).join(".")
-		for (let [index, segment] of ip.slice_dotted_bin_by_boundaries(dotted_subnet_mask).entries()){
-			document.getElementById("mask_bin").getElementsByClassName("segment")[index].innerText = segment
-		}
-		
-
-		// This is for / xx (slash).
-		for (let i = 0; i < document.getElementsByClassName("slashed_mask").length; i++){
-			document.getElementsByClassName("slashed_mask")[i].innerText = '/ ' + ip.get_subnet_mask_length().toString()
-		}
-		// For summary
-		// Bit counts
-		document.getElementById("summary").getElementsByClassName("subnet_class_bits")[0].getElementsByTagName("span")[0].innerText = ip.class_bit_number
-		document.getElementById("summary").getElementsByClassName("subnet_bits")[0].getElementsByTagName("span")[0].innerText = ip.subnet_bit_number
-		document.getElementById("summary").getElementsByClassName("host_bits")[0].getElementsByTagName("span")[0].innerText = ip.host_bit_number
-
-
-		document.getElementById("host_capacity").innerText = `2^(${ip.host_bit_number} host_bits) - 2 = ${2**ip.host_bit_number - 2}`
-		document.getElementById("subnet_capacity").innerText = `2^(${ip.subnet_bit_number} ${lang.monopoly("subnet_bit", ip.subnet_bit_number)}) = ${2**ip.subnet_bit_number} ${lang.monopoly("network",2**ip.subnet_bit_number,"subnets")}`
-
-	}
-
-
-	function generate_random(min, max){
-		/* Generate a random number. */
-		let random_number = Math.random() * (max - min) + min;
-		return Math.floor(random_number)
-	}
-
-	// function 
-	function generate_ip_in_dec(){
-		/* Generate 4 octets of IP addr. */
-		let _ip_octets = []
-		for (let i = 0; i < IP_OCTET_QTY; i++){
-			let octet_value = generate_random(0x00, 0xff)
-			_ip_octets.push(octet_value)
-		}
-		return _ip_octets
-	}
-
-	function generateBinIp(){
-		/* Generate 32 binary ip in string */
-		let _ip_octets = ""
-		for (let i = 0; i < IP_OCTET_QTY; i++){
-			let octet_value = generate_random(0x00, 0xff)
-			_ip_octets+=octet_value.toString(2).padStart(OCTET_BITS, "0")
-		}
-		return _ip_octets
-	}
-
-	function bin32_to_dec_array(bin32){
-		/* 32 bit binary style string to array of 4 decimal numbers */
-		let _bin_array = bin32_to_bin_array(bin32)
-		return bin_array_to_dec_array(_bin_array)
-	}
-
-	function dec_array_to_bin32(dec_array){
-		_dec_array = dec_array
-		return dec_array_to_bin_array(_dec_array).join("")
-	}
-
-	function binStrToDecNum(int_str){
-		/* String binary to decimal number */
-		return parseInt(int_str, 2) >>> 0
-	}
-
-	function bin32_to_bin_array(bin_32){
-		/* Devide 32 bit bin-in-str to 4 octets */
-		let result = []
-		for (let i = 0; i < IP_OCTET_QTY; i++){
-			let octet_bin = bin_32.slice(i * OCTET_BITS, (i + 1) * OCTET_BITS)
-			result.push(octet_bin)
-		}
-		return result
-	}
-
-	function bin_array_to_dec_array(four_octets){
-		/* Convert literal bin ip to decimal ip */
-		let result = []
-		for (octet of four_octets){
-			result.push(binStrToDecNum(octet))
-		}
-		return result
-	}
-
-	function dec_array_to_bin_array(ip_blocks){
-		/* Return an 8-bit bin style string */
-		let _ip_binary_octets = []
-		for (let each_octet of ip_blocks){
-			_ip_binary_octets.push(dec_to_nbit_bin(each_octet))
-		}
-		return _ip_binary_octets
-	}
-
-	function dec_to_nbit_bin(dec_num, bit_len=OCTET_BITS){
-		return dec_num.toString(2).padStart(bit_len, "0")
-	}
-	
-	function insert_at_index(text, insertion, index){
-		/* Insert after index. */
-		let _text = text
-		let _index_offset = 1
-		let _index = index + _index_offset
-		return text.slice(0, _index) + insertion + text.slice(_index)
-	}
-
-	function index_offset_with_formatted_ip(formatted_bin_ip_index){
-		/* 
-		Deal with 32bit+dots format ip, skip these dots
-		Make sure the boundary are created within these indeces:
-		0~7, 9~16, 18~25, 27~34
-		0 -> 0 * 8 + 0
-		8 -> 9 = 1 * 8 + 1
-		16 -> 18 = 2 * 8 + 2
-		24 -> 27 = 3 * 8 + 3
-		n -> n * 8 + n = 9n
-		*/
-		return formatted_bin_ip_index + Math.floor(formatted_bin_ip_index/OCTET_BITS)
-	}
-</script>
+<script type="module" src="./js/constants.js"></script>
+<script type="module" src="./js/IP.js"></script>
+<script type="module" src="./js/layout.js"></script>
+<script type="module" src="./js/script.js"></script>
 </html>
