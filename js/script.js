@@ -1,11 +1,15 @@
 // script.js
 import {IP} from './IP.js';
 import * as CONSTANTS from './constants.js';
-import {draw} from './layout.js'
+import {Layout} from './layout.js'
 
 const ip = new IP()
-
-draw(ip)
+const layout = new Layout(ip);
+layout.display_slash_mask()
+layout.display_decimal_ip()
+layout.display_binary_ip()
+layout.display_decimal_mask()
+layout.display_binary_mask()
 // var ip = {
 //     dec: [],
 //     bin: "",
