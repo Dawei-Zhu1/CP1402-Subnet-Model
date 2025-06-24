@@ -3,7 +3,7 @@ import * as CONSTANTS from './constants.js';
 
 export class IP {
     constructor() {
-        this.boundaries = [
+        this._boundaries = [
             CONSTANTS.DEFAULT_CLASS_LENGTH - 1, // Boundary between class and subnet range
             CONSTANTS.IP_MAX_LEN - CONSTANTS.DEFAULT_HOST_LENGTH - 1 // Boundary between subnet and host range
         ]
@@ -57,7 +57,7 @@ export class IP {
             }
             segment += current_bit
             // Check whether has touched the boundaries
-            if (this.boundaries.includes(pos) || pos === CONSTANTS.IP_MAX_LEN - 1) {
+            if (this._boundaries.includes(pos) || pos === CONSTANTS.IP_MAX_LEN - 1) {
                 formatted_ip.push(segment)
                 segment = ''
             }
@@ -66,21 +66,25 @@ export class IP {
     }
 
     get_subnet_bit_length() {
-        return this.boundaries[1] - this.boundaries[0]
+        return this._boundaries[1] - this._boundaries[0]
     }
 
     get_host_bit_length() {
-        return CONSTANTS.IP_MAX_LEN - this.boundaries[1] - 1
+        return CONSTANTS.IP_MAX_LEN - this._boundaries[1] - 1
     }
 
 
-    get_class_range() {
-        return [CONSTANTS.IP_BEGINNING_POS, this.get_class_bit_length() - 1]
+    get_class_boundary_pos() {
+        return this._boundaries[0]
+    }
+
+    get_subnet_boundary_pos() {
+        return this._boundaries[1]
     }
 
     get_subnet_boundary_notation() {
         /* Get the number after the slash notation */
-        return this.boundaries[1] + 1
+        return this._boundaries[1] + 1
     }
 
     get_subnet_mask() {
@@ -106,4 +110,14 @@ export class IP {
     get_mask_segments() {
         return this.get_ip_segment(this.get_subnet_mask_bin32())
     }
+
+    set_class_boundary(move) {
+        this._boundaries[0] += move
+    }
+
+    set_subnet_boundary(move) {
+        this._boundaries[1] += move
+    }
+
+
 }

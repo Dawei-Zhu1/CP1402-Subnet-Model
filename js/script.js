@@ -5,23 +5,8 @@ import {Layout} from './layout.js'
 
 const ip = new IP()
 const layout = new Layout(ip);
-layout.display_slash_mask()
-layout.display_decimal_ip()
-layout.display_binary_ip()
-layout.display_decimal_mask()
-layout.display_binary_mask()
-// var ip = {
-//     dec: [],
-//     bin: "",
-//     class_bit_number: 16,
-//     subnet_bit_number: 8,
-//     host_bit_number: 8,
-//     __initialise__: function () {
-//         this.bin = generate_ip() // Int
-//         this.dec = bin_to_256nary(this.bin)
-//         this.subnet = this.get_subnet_address()
-//
-//     },
+layout.refresh()
+
 //     subnet_boundary_shift_left: function () {
 //         if (this.subnet_bit_number > 0) {
 //             this.subnet_bit_number--
@@ -91,46 +76,40 @@ layout.display_binary_mask()
 //         return to_bin32(this.bin)
 //     },
 // }
-//
-// ip.__initialise__()
-// draw(ip)
-//
-// document.addEventListener('keydown',
-//     (event) => {
-//         let keyname = event.key,
-//             keycode = event.code
-//         event.preventDefault()
-//         // Ctrl + ArrLeft
-//         if ((event.ctrlKey || event.metaKey) && event.key === 'ArrowLeft') {
-//             ip.to_the_most_left_subnet_boundary()
-//         } else
-//             // Ctrl + ArrRight
-//         if ((event.ctrlKey || event.metaKey) && event.key === 'ArrowRight') {
-//             ip.to_the_most_right_subnet_boundary()
-//         } else
-//             // Ctrl + A
-//         if ((event.ctrlKey || event.metaKey) && event.key === 'a') {
-//             ip.to_the_most_left_provided_boundary()
-//         } else
-//             // Ctrl + D
-//         if ((event.ctrlKey || event.metaKey) && event.key === 'd') {
-//             ip.to_the_most_right_provided_boundary()
-//         } else
-//             // Single key
-//         if (keyname == 'ArrowLeft') {
-//             // subnet_boundary_shift_left()
-//             ip.subnet_boundary_shift_left()
-//         } else if (keyname == 'ArrowRight') {
-//             // subnet_boundary_shift_right()
-//             ip.subnet_boundary_shift_right()
-//         } else if (keyname == 'a') {
-//             ip.provided_boundary_shift_left()
-//         } else if (keyname == 'd') {
-//             ip.provided_boundary_shift_right()
-//         }
-//         draw(ip)
-//     }
-// )
+document.addEventListener('keydown',
+    (event) => {
+        let keyname = event.key,
+            keycode = event.code
+        event.preventDefault()
+        // Ctrl + ArrLeft
+        if ((event.ctrlKey || event.metaKey) && event.key === 'ArrowLeft') {
+            // ip.to_the_most_left_subnet_boundary()
+        } else
+            // Ctrl + ArrRight
+        if ((event.ctrlKey || event.metaKey) && event.key === 'ArrowRight') {
+            // ip.to_the_most_right_subnet_boundary()
+        } else
+            // Ctrl + A
+        if ((event.ctrlKey || event.metaKey) && event.key === 'a') {
+            // ip.to_the_most_left_provided_boundary()
+        } else
+            // Ctrl + D
+        if ((event.ctrlKey || event.metaKey) && event.key === 'd') {
+            // ip.to_the_most_right_provided_boundary()
+        } else
+            // Single key
+        if (keyname === 'ArrowLeft') {
+            layout.subnet_boundary_shift(-1)
+        } else if (keyname === 'ArrowRight') {
+            layout.subnet_boundary_shift()
+        } else if (keyname === 'a') {
+            layout.class_boundary_shift(-1)
+        } else if (keyname === 'd') {
+            layout.class_boundary_shift()
+        }
+        console.log(ip.get_class_boundary_pos(), ip.get_subnet_boundary_pos())
+    }
+)
 //
 // function determine_subnet_address(ip, subnetmask) {
 //
