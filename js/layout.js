@@ -58,7 +58,7 @@ export class Layout {
     */
     class_boundary_shift(move = 1) {
         let predictedPosition = this.ip.getClassBoundaryPosEnd() + move
-        if (predictedPosition >= 0 && predictedPosition < this.ip.get_subnet_boundary_pos_begin()) {
+        if (predictedPosition >= 0 && predictedPosition < this.ip.getSubnetBoundaryPosStart()) {
             this.ip.setClassBoundary(move)
         } else if (predictedPosition < 0) {
             this.ip.setClassBoundary(-this.ip.getClassBoundaryPosEnd())

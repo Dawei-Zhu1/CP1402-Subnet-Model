@@ -14,8 +14,8 @@ export class IP {
 
     _generateRandom(min, max) {
         /* Generate a random number, exclusive of max*/
-        let random_number = Math.random() * (max - min) + min;
-        return Math.floor(random_number)
+        let randomNumber = Math.random() * (max - min) + min;
+        return Math.floor(randomNumber)
     }
 
     _generateOctet() {
@@ -50,7 +50,7 @@ export class IP {
     }
 
     _getSubnetBitRange() {
-        return [this.get_subnet_boundary_pos_begin(), this.getSubnetBoundaryPosEnd() + 1]
+        return [this.getSubnetBoundaryPosStart(), this.getSubnetBoundaryPosEnd() + 1]
     }
 
     _getHostBitRange() {
@@ -83,7 +83,6 @@ export class IP {
             let [start, end] = r
             result.push(ip32.slice(start, end))
         }
-        console.log(ip32, result)
         return result
     }
 
@@ -102,7 +101,6 @@ export class IP {
                 }
             }
         }
-        console.log(formattedIP)
         return formattedIP
     }
 
@@ -115,7 +113,7 @@ export class IP {
     }
 
     /* Class bits */
-    get_class_boundary_start_pos() {
+    getClassBoundaryStartPos() {
         return 0
     }
 
@@ -123,12 +121,12 @@ export class IP {
         return this._boundaries[0]
     }
 
-    get_class_boundary_notation() {
+    getClassBoundaryNotation() {
         return this.getClassBoundaryPosEnd() + 1
     }
 
     /* Subnet bits */
-    get_subnet_boundary_pos_begin() {
+    getSubnetBoundaryPosStart() {
         return this.getClassBoundaryPosEnd() + 1
     }
 
