@@ -47,13 +47,20 @@ export class Layout {
     // document.getElementById("last_subnet").innerText = bin_to_256nary(last_subnet_bin).join(".")
 
     // Update data
-    update_data() {
+    updateSubnetCapacity() {
         document.getElementById("subnet_capacity").innerHTML = `2 ^ (${this.ip.getSubnetBitLength()}) = ${2 ** this.ip.getSubnetBitLength()}`
+    }
+
+    updateHostCapacity(){
         document.getElementById("host_capacity").innerHTML = `2 ^ (${this.ip.getHostBitLength()}) - 2 = ${2 ** this.ip.getHostBitLength() - 2}`
     }
 
-    /*
-    Move the class boundary
+    updateData() {
+        this.updateSubnetCapacity()
+        this.updateHostCapacity()
+    }
+
+    /* Move the class boundary
     * If predicted move position is out of the range, then move to leftmost or rightmost.
     */
     moveClassBoundary(move = 1) {
@@ -110,17 +117,20 @@ export class Layout {
         this.displayBinaryIP()
         this.displayDecimalMask()
         this.displayBinaryMask()
+        this.updateData()
     }
 
     refreshClassBoundary() {
         this.displayBinaryIP()
         this.displayBinaryMask()
+        this.updateSubnetCapacity()
     }
 
     refreshSubnetBoundary() {
         this.displayBinaryIP()
         this.displayBinaryMask()
         this.displayDecimalMask()
+        this.updateData()
     }
 
 }
