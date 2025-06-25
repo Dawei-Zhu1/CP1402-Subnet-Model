@@ -72,7 +72,7 @@ export class Layout {
 
     moveSubnetBoundary(move = 1) {
         let predictedPosition = this.ip.getSubnetBoundaryPosEnd() + move
-        if (this.ip.getSubnetBoundaryPosEnd() <= predictedPosition && predictedPosition <= CONSTANTS.IP_MAX_LEN - 3) {
+        if (this.ip.getClassBoundaryPosEnd() <= predictedPosition && predictedPosition <= CONSTANTS.IP_END_POS - 2) {
             this.ip.setSubnetBoundary(move)
 
             this.displayBinaryIP()
