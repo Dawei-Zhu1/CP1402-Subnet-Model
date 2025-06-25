@@ -68,12 +68,12 @@ export class Layout {
 
     moveClassBoundaryFurthermost(direction = DIRECTION.RIGHT) {
         switch (direction) {
-            case DIRECTION.RIGHT:
-                this.ip.setClassBoundary(this.ip.getSubnetBoundaryPosEnd())
-                break
             case DIRECTION.LEFT:
                 this.ip.setClassBoundary(-1)
                 break;
+            case DIRECTION.RIGHT:
+                this.ip.setClassBoundary(this.ip.getSubnetBoundaryPosEnd())
+                break
         }
         this.refreshClassBoundary()
     }
@@ -91,17 +91,18 @@ export class Layout {
         }
     }
 
-    moveSubnetBoundaryLeftmost() {
-        this.ip.setSubnetBoundary(this.ip.getClassBoundaryPosEnd())
+    moveSubnetBoundaryFurthermost(direction = DIRECTION.RIGHT) {
+        switch (direction) {
+            case DIRECTION.LEFT:
+                this.ip.setSubnetBoundary(this.ip.getClassBoundaryPosEnd())
+                break;
+            case DIRECTION.RIGHT:
+                this.ip.setSubnetBoundary(CONSTANTS.SUBNET_RIGHTMOST_BOUNDARY_POS)
+                break
+        }
         this.refreshSubnetBoundary()
     }
 
-
-    moveSubnetBoundaryRightmost() {
-        this.ip.setSubnetBoundary(CONSTANTS.SUBNET_RIGHTMOST_BOUNDARY_POS)
-        this.refreshSubnetBoundary()
-
-    }
 
     refreshAll() {
         this.displaySlashMask()

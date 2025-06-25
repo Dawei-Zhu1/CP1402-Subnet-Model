@@ -17,10 +17,10 @@ document.addEventListener('keydown',
         if (event.ctrlKey || event.metaKey) {
             switch (keyName) {
                 case 'ArrowLeft':
-                    layout.moveSubnetBoundaryLeftmost()
+                    layout.moveSubnetBoundaryFurthermost(DIRECTION.LEFT)
                     break;
                 case 'ArrowRight':
-                    layout.moveSubnetBoundaryRightmost()
+                    layout.moveSubnetBoundaryFurthermost()
                     break;
                 case 'a':
                     layout.moveClassBoundaryFurthermost(DIRECTION.LEFT)
