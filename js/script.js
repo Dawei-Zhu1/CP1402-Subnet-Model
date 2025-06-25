@@ -7,75 +7,6 @@ const ip = new IP()
 const layout = new Layout(ip);
 layout.refresh()
 
-//     subnet_boundary_shift_left: function () {
-//         if (this.subnet_bit_number > 0) {
-//             this.subnet_bit_number--
-//             this.host_bit_number++
-//             this.set_subnet_mask()
-//         }
-//     },
-//     subnet_boundary_shift_right: function () {
-//         if (this.host_bit_number > LEAST_SUBNET_BITS) {
-//             this.subnet_bit_number++
-//             this.host_bit_number--
-//             this.set_subnet_mask()
-//         }
-//     },
-//     provided_boundary_shift_left: function () {
-//         if (this.class_bit_number > 1) {
-//             this.class_bit_number--
-//             this.subnet_bit_number++
-//             this.set_provided_mask()
-//         }
-//     },
-//     provided_boundary_shift_right: function () {
-//         if (this.subnet_bit_number > 0) {
-//             this.class_bit_number++
-//             this.subnet_bit_number--
-//             this.set_provided_mask()
-//         }
-//     },
-//     to_the_most_left_subnet_boundary: function () {
-//         while (this.subnet_bit_number > 0) {
-//             this.subnet_boundary_shift_left()
-//         }
-//     },
-//     to_the_most_right_subnet_boundary: function () {
-//         while (this.host_bit_number > LEAST_SUBNET_BITS) {
-//             this.subnet_boundary_shift_right()
-//         }
-//     },
-//     to_the_most_left_provided_boundary: function () {
-//         while (this.class_bit_number > 1) {
-//             this.provided_boundary_shift_left()
-//         }
-//     },
-//     to_the_most_right_provided_boundary: function () {
-//         while (this.subnet_bit_number > 0) {
-//             this.provided_boundary_shift_right()
-//         }
-//     },
-//     get_subnet_address: function () {
-//         return this.subnet_mask & this.bin
-//     },
-//     get_subnet_mask: function () {
-//         // Get subnet mask with host bits, set unsigned
-//         return BIN32MAX << this.host_bit_number >>> 0
-//     },
-//     set_subnet_mask: function () {
-//         // Apply subnet mask
-//         this.subnet_mask = this.get_subnet_mask()
-//     },
-//     get_provided_mask: function () {
-//         return BIN32MAX << (IP_MAX_BITS - this.class_bit_number) >>> 0
-//     },
-//     set_provided_mask: function () {
-//         this.provided_mask = this.get_provided_mask()
-//     },
-//     bin32: function () {
-//         return to_bin32(this.bin)
-//     },
-// }
 document.addEventListener('keydown',
     (event) => {
         let keyname = event.key,
@@ -99,49 +30,13 @@ document.addEventListener('keydown',
         } else
             // Single key
         if (keyname === 'ArrowLeft') {
-            layout.subnet_boundary_shift(-1)
+            layout.moveSubnetBoundary(-1)
         } else if (keyname === 'ArrowRight') {
-            layout.subnet_boundary_shift()
+            layout.moveSubnetBoundary()
         } else if (keyname === 'a') {
             layout.class_boundary_shift(-1)
         } else if (keyname === 'd') {
             layout.class_boundary_shift()
         }
-        console.log(ip.get_class_boundary_pos(), ip.get_subnet_boundary_pos())
     }
 )
-//
-// function determine_subnet_address(ip, subnetmask) {
-//
-// }
-//
-// function to_bin32(ip) {
-//     /* Receive an integer, return a string showing a 32-bit value. */
-//     return ip.toString(2).padStart(IP_MAX_BITS, "0")
-// }
-//
-// function bin_to_256nary(bin) {
-//     /* Return a list of 4 octuples. */
-//     let octuple = []
-//     let value = bin
-//     while (value) {
-//         octuple.unshift(value % 256)
-//         value = Math.floor(value / 256)
-//     }
-//     return octuple
-// }
-//
-// function slice_formatted_bin(formatted_full_bin) {
-//     let mask_class_bits = formatted_full_bin.slice(
-//         IP_BEGIN_INDEX,
-//         index_offset_with_formatted_ip(ip.class_bit_number)
-//     )
-//     let mask_subnet_bits = formatted_full_bin.slice(
-//         index_offset_with_formatted_ip(ip.class_bit_number),
-//         index_offset_with_formatted_ip(ip.class_bit_number + ip.subnet_bit_number)
-//     )
-//     let mask_host_bits = formatted_full_bin.slice(index_offset_with_formatted_ip(IP_MAX_BITS - ip.host_bit_number))
-//     return [mask_class_bits, mask_subnet_bits, mask_host_bits]
-// }
-//
-

@@ -9,113 +9,180 @@ export class IP {
         ]
         this.decimals = [];
         //
-        this.generate_ip()
+        this.generateIP()
     }
 
-    _generate_random(min, max) {
+    _generateRandom(min, max) {
         /* Generate a random number, exclusive of max*/
         let random_number = Math.random() * (max - min) + min;
         return Math.floor(random_number)
     }
 
-    _generate_octet() {
+    _generateOctet() {
         /* Generate from 0~255 unsigned. */
-        return this._generate_random(0, 2 ** CONSTANTS.OCTET_LEN)
+        return this._generateRandom(0, 2 ** CONSTANTS.OCTET_LEN)
     }
 
-    generate_ip() {
+    generateIP() {
         /* Generate the octet four times */
         for (let i = 0; i < 4; i++) {
-            this.decimals.push(this._generate_octet())
+            this.decimals.push(this._generateOctet())
         }
     }
 
-    _dec_to_bin8(octet) {
-        /* Receive an integer, return a string showing a 8-bit value. */
+    _transDec2Bin8(octet) {
+        /* Receive an integer, return a string showing an 8-bit value. */
         return octet.toString(2).padStart(CONSTANTS.OCTET_LEN, "0")
     }
 
-    to_bin32(ip = this.decimals) {
+    toBin32(ip = this.decimals) {
         /* Transform to 4 ip octets in binary form */
         let raw_ip = ip
         let bin32ip = []
         for (const octet of raw_ip) {
-            bin32ip.push(this._dec_to_bin8(octet))
+            bin32ip.push(this._transDec2Bin8(octet))
         }
         return bin32ip
     }
 
-    get_ip_segment(ip = this.to_bin32()) {
-        let ip_raw = ip.join('')
+    _getClassBitRange() {
+        return [0, this.getClassBoundaryPosEnd() + 1]
+    }
+
+    _getSubnetBitRange() {
+        return [this.get_subnet_boundary_pos_begin(), this.getSubnetBoundaryPosEnd() + 1]
+    }
+
+    _getHostBitRange() {
+        return [this.getHostBoundaryPosStart(), CONSTANTS.IP_MAX_LEN]
+    }
+
+    getIPSegmentRanges() {
+        let boundaries = [
+            this._getClassBitRange(),
+            this._getSubnetBitRange(),
+            this._getHostBitRange()
+        ]
+        let ipSegments = []
+        for (let segment of boundaries) {
+            ipSegments.push(segment)
+        }
+
+        return ipSegments
+    }
+
+    getIP() {
+        return this.decimals
+    }
+
+    _getIPSegmentsRaw(ip = this.getIP()) {
+        let ip32 = this.toBin32(ip).join('')
+        let ranges = this.getIPSegmentRanges()
+        let result = []
+        for (let r of ranges) {
+            let [start, end] = r
+            result.push(ip32.slice(start, end))
+        }
+        console.log(ip32, result)
+        return result
+    }
+
+    // Add point separator to ip
+    getIPSegmentFormatted(ip = this.getIP()) {
+        let rawIPSegments = this._getIPSegmentsRaw(ip)
+        let formattedIP = ''
         // Start looping
-        let formatted_ip = []
-        let segment = ''
-        for (let pos = 0; pos < ip_raw.length; pos++) {
-            let current_bit = ip_raw[pos]
-            if (pos % CONSTANTS.OCTET_LEN === CONSTANTS.OCTET_LEN - 1 && pos !== CONSTANTS.IP_MAX_LEN - 1) {
-                current_bit += '.'
-            }
-            segment += current_bit
-            // Check whether has touched the boundaries
-            if (this._boundaries.includes(pos) || pos === CONSTANTS.IP_MAX_LEN - 1) {
-                formatted_ip.push(segment)
-                segment = ''
+        let bitCounter = 0;
+        for (let segment of rawIPSegments) {
+            let formattedSeg = ''
+            for (let bit of segment) {
+                bitCounter++
+                if (bitCounter % CONSTANTS.OCTET_LEN === 7 && bitCounter < CONSTANTS.IP_END_POS) {
+                    bit += '.'
+                }
             }
         }
-        return formatted_ip
+        console.log(formattedIP)
+        return formattedIP
     }
 
-    get_subnet_bit_length() {
-        return this._boundaries[1] - this._boundaries[0]
+    getSubnetBitLength() {
+        return this.getSubnetBoundaryPosEnd() - this.getClassBoundaryPosEnd()
     }
 
-    get_host_bit_length() {
-        return CONSTANTS.IP_MAX_LEN - this._boundaries[1] - 1
+    getHostBitLength() {
+        return CONSTANTS.IP_MAX_LEN - this.getSubnetBoundaryNotation()
     }
 
+    /* Class bits */
+    get_class_boundary_start_pos() {
+        return 0
+    }
 
-    get_class_boundary_pos() {
+    getClassBoundaryPosEnd() {
         return this._boundaries[0]
     }
 
-    get_subnet_boundary_pos() {
+    get_class_boundary_notation() {
+        return this.getClassBoundaryPosEnd() + 1
+    }
+
+    /* Subnet bits */
+    get_subnet_boundary_pos_begin() {
+        return this.getClassBoundaryPosEnd() + 1
+    }
+
+    // Return the position of subnet boundary
+    getSubnetBoundaryPosEnd() {
         return this._boundaries[1]
     }
 
-    get_subnet_boundary_notation() {
+    // Literal position of subnet boundary
+    getSubnetBoundaryNotation() {
         /* Get the number after the slash notation */
-        return this._boundaries[1] + 1
+        return this.getSubnetBoundaryPosEnd() + 1
     }
 
-    get_subnet_mask() {
+    /* Host bits */
+    getHostBoundaryPosStart() {
+        return this.getSubnetBoundaryPosEnd() + 1
+    }
+
+    getIPEndPos() {
+        return CONSTANTS.IP_MAX_LEN - 1
+    }
+
+    /*Subnet mask*/
+
+    getSubnetMask() {
         let mask = [0, 0, 0, 0]
-        let full_mask_sets = Math.floor(this.get_subnet_boundary_notation() / CONSTANTS.OCTET_LEN)
-        let partial_mask = this.get_subnet_boundary_notation() % CONSTANTS.OCTET_LEN
-        let octet_pos = 0
-        for (; octet_pos < full_mask_sets; octet_pos++) {
-            mask[octet_pos] = CONSTANTS.OCTET_MAX_VALUE
+        let fullMaskSets = Math.floor(this.getSubnetBoundaryNotation() / CONSTANTS.OCTET_LEN)
+        let partialMask = this.getSubnetBoundaryNotation() % CONSTANTS.OCTET_LEN
+        let octetPos = 0
+        for (; octetPos < fullMaskSets; octetPos++) {
+            mask[octetPos] = CONSTANTS.OCTET_MAX_VALUE
         }
-        if (partial_mask) {
-            let offset = CONSTANTS.OCTET_LEN - partial_mask
-            mask[octet_pos] = (2 ** partial_mask - 1) << offset
+        if (partialMask) {
+            let offset = CONSTANTS.OCTET_LEN - partialMask
+            mask[octetPos] = (2 ** partialMask - 1) << offset
         }
         return mask
     }
 
-    get_subnet_mask_bin32() {
-        let subnet_mask = this.get_subnet_mask()
-        return this.to_bin32(subnet_mask)
+    getSubnetMaskBin32() {
+        let subnetMask = this.getSubnetMask()
+        return this.toBin32(subnetMask)
     }
 
-    get_mask_segments() {
-        return this.get_ip_segment(this.get_subnet_mask_bin32())
+    getMaskSegments() {
+        return this.getIPSegmentFormatted(this.getSubnetMaskBin32())
     }
 
-    set_class_boundary(move) {
+    setClassBoundary(move) {
         this._boundaries[0] += move
     }
 
-    set_subnet_boundary(move) {
+    setSubnetBoundary(move) {
         this._boundaries[1] += move
     }
 

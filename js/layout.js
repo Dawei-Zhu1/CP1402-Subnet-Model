@@ -6,36 +6,36 @@ export class Layout {
     }
 
     // insert decimal ip into html
-    display_decimal_ip() {
+    displayDecimalIP() {
         for (let [index, octet] of this.ip.decimals.entries()) {
             document.getElementById("ip_dec").getElementsByClassName("octet")[index].innerText = octet.toString()
         }
     }
 
     // insert binary ip into html
-    display_binary_ip() {
-        for (let [index, each_part] of this.ip.get_ip_segment().entries()) {
+    displayBinaryIP() {
+        for (let [index, each_part] of this.ip.getIPSegmentRanges().entries()) {
             document.getElementById("ip_bin").getElementsByClassName("segment")[index].innerText = each_part
         }
     }
 
     // This is for slash format.
-    display_slash_mask() {
+    displaySlashMask() {
         for (let i = 0; i < document.getElementsByClassName("slashed_mask").length; i++) {
-            document.getElementsByClassName("slashed_mask")[i].innerText = '/' + this.ip.get_subnet_boundary_notation().toString()
+            document.getElementsByClassName("slashed_mask")[i].innerText = '/' + this.ip.getSubnetBoundaryNotation().toString()
         }
     }
 
 
     /* Mask */
-    display_decimal_mask() {
-        document.getElementById("mask_dec").getElementsByTagName('span')[1].innerText = this.ip.get_subnet_mask().join('.')
+    displayDecimalMask() {
+        document.getElementById("mask_dec").getElementsByTagName('span')[1].innerText = this.ip.getSubnetMask().join('.')
     }
 
     // Insert binary mask
-    display_binary_mask() {
-        for (let [index, each_part] of this.ip.get_mask_segments().entries()) {
-            document.getElementById("mask_bin").getElementsByClassName("segment")[index].innerText = each_part
+    displayBinaryMask() {
+        for (let [index, eachPart] of this.ip._getIPSegmentsRaw().entries()) {
+            document.getElementById("mask_bin").getElementsByClassName("segment")[index].innerText = eachPart
         }
     }
 
@@ -48,44 +48,46 @@ export class Layout {
 
     // Update data
     update_data() {
-        document.getElementById("subnet_capacity").innerHTML = `2 ^ (${this.ip.get_subnet_bit_length()}) = ${2 ** ip.get_subnet_bit_length()}`
-        document.getElementById("host_capacity").innerHTML = `2 ^ (${this.ip.get_host_bit_length()}) - 2 = ${2 ** ip.get_host_bit_length() - 2}`
+        document.getElementById("subnet_capacity").innerHTML = `2 ^ (${this.ip.getSubnetBitLength()}) = ${2 ** this.ip.getSubnetBitLength()}`
+        document.getElementById("host_capacity").innerHTML = `2 ^ (${this.ip.getHostBitLength()}) - 2 = ${2 ** this.ip.getHostBitLength() - 2}`
     }
 
     /*
-    Move the classboundary
+    Move the class boundary
     * If predicted move position is out of the range, then move to leftmost or rightmost.
     */
     class_boundary_shift(move = 1) {
-        let predicted_position = this.ip.get_class_boundary_pos() + move
-        if (0 <= predicted_position < this.ip.get_class_boundary_pos()) {
-            this.ip.set_class_boundary(move)
-        } else if (predicted_position < 0) {
-            this.ip.set_class_boundary(-this.ip.get_class_boundary_pos())
+        let predictedPosition = this.ip.getClassBoundaryPosEnd() + move
+        if (predictedPosition >= 0 && predictedPosition < this.ip.get_subnet_boundary_pos_begin()) {
+            this.ip.setClassBoundary(move)
+        } else if (predictedPosition < 0) {
+            this.ip.setClassBoundary(-this.ip.getClassBoundaryPosEnd())
         } else {
-            let delta = this.ip.get_subnet_boundary_pos() - this.ip.get_class_boundary_pos()
-            this.ip.set_class_boundary(delta)
+            let delta = this.ip.getSubnetBoundaryPosEnd() - this.ip.getClassBoundaryPosEnd()
+            this.ip.setClassBoundary(delta)
         }
-        this.display_binary_ip()
-        this.display_binary_mask()
+        this.displayBinaryIP()
+        this.displayBinaryMask()
     }
 
-    subnet_boundary_shift(move = 1) {
-        let predicted_position = this.ip.get_class_boundary_pos() + move
-        if (this.ip.get_class_boundary_pos() < predicted_position < CONSTANTS.IP_MAX_LEN - 3) {
-            this.ip.set_subnet_boundary(move)
+    moveSubnetBoundary(move = 1) {
+        let predictedPosition = this.ip.getSubnetBoundaryPosEnd() + move
+        if (this.ip.getSubnetBoundaryPosEnd() <= predictedPosition && predictedPosition <= CONSTANTS.IP_MAX_LEN - 3) {
+            this.ip.setSubnetBoundary(move)
+
+            this.displayBinaryIP()
+            this.displayBinaryMask()
+            this.displayDecimalMask()
         }
-        this.display_binary_ip()
-        this.display_binary_mask()
-        this.display_decimal_mask()
+
     }
 
     refresh() {
-        this.display_slash_mask()
-        this.display_decimal_ip()
-        this.display_binary_ip()
-        this.display_decimal_mask()
-        this.display_binary_mask()
+        this.displaySlashMask()
+        this.displayDecimalIP()
+        this.displayBinaryIP()
+        this.displayDecimalMask()
+        this.displayBinaryMask()
     }
 
 }
