@@ -86,20 +86,23 @@ export class IP {
         return result
     }
 
+
     // Add point separator to ip
-    getIPSegmentFormatted(ip = this.getIP()) {
+    getFormattedIPSegments(ip = this.getIP()) {
         let rawIPSegments = this._getIPSegmentsRaw(ip)
-        let formattedIP = ''
+        let formattedIP = []
         // Start looping
         let bitCounter = 0;
         for (let segment of rawIPSegments) {
             let formattedSeg = ''
             for (let bit of segment) {
                 bitCounter++
+                formattedSeg += bit
                 if (bitCounter % CONSTANTS.OCTET_LEN === 7 && bitCounter < CONSTANTS.IP_END_POS) {
-                    bit += '.'
+                    formattedSeg += '.'
                 }
             }
+            formattedIP.push(formattedSeg)
         }
         return formattedIP
     }
@@ -172,16 +175,19 @@ export class IP {
         return this.toBin32(subnetMask)
     }
 
-    getMaskSegments() {
-        return this.getIPSegmentFormatted(this.getSubnetMaskBin32())
+    getFormattedMaskSegments() {
+        return this.getFormattedIPSegments(this.getSubnetMaskBin32())
     }
 
-    setClassBoundary(move) {
-        this._boundaries[0] += move
+    setClassBoundary(pos) {
+        if (pos >= -1 && pos <= this.getSubnetBoundaryPosEnd()) {
+            this._boundaries[0] = pos
+        }
     }
 
-    setSubnetBoundary(move) {
-        this._boundaries[1] += move
+    setSubnetBoundary(pos) {
+        if (pos <= CONSTANTS.SUBNET_RIGHTMOST_BOUNDARY_POS && pos >= this.getClassBoundaryPosEnd())
+            this._boundaries[1] = pos
     }
 
 

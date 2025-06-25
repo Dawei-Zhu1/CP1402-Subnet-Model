@@ -5,7 +5,7 @@ import {Layout} from './layout.js'
 
 const ip = new IP()
 const layout = new Layout(ip);
-layout.refresh()
+layout.refreshAll()
 
 document.addEventListener('keydown',
     (event) => {
@@ -14,19 +14,19 @@ document.addEventListener('keydown',
         event.preventDefault()
         // Ctrl + ArrLeft
         if ((event.ctrlKey || event.metaKey) && event.key === 'ArrowLeft') {
-            // ip.to_the_most_left_subnet_boundary()
+            layout.moveSubnetBoundaryLeftmost()
         } else
             // Ctrl + ArrRight
         if ((event.ctrlKey || event.metaKey) && event.key === 'ArrowRight') {
-            // ip.to_the_most_right_subnet_boundary()
+            layout.moveSubnetBoundaryRightmost()
         } else
             // Ctrl + A
         if ((event.ctrlKey || event.metaKey) && event.key === 'a') {
-            // ip.to_the_most_left_provided_boundary()
+            layout.moveClassBoundaryLeftmost()
         } else
             // Ctrl + D
         if ((event.ctrlKey || event.metaKey) && event.key === 'd') {
-            // ip.to_the_most_right_provided_boundary()
+            layout.moveClassBoundaryRightmost()
         } else
             // Single key
         if (keyname === 'ArrowLeft') {
@@ -34,9 +34,9 @@ document.addEventListener('keydown',
         } else if (keyname === 'ArrowRight') {
             layout.moveSubnetBoundary()
         } else if (keyname === 'a') {
-            layout.class_boundary_shift(-1)
+            layout.moveClassBoundary(-1)
         } else if (keyname === 'd') {
-            layout.class_boundary_shift()
+            layout.moveClassBoundary()
         }
     }
 )
