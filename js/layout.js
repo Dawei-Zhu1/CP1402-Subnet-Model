@@ -1,4 +1,5 @@
 import * as CONSTANTS from "./constants.js";
+import {DIRECTION} from "./constants.js";
 
 export class Layout {
     constructor(ip) {
@@ -65,14 +66,20 @@ export class Layout {
         this.refreshClassBoundary()
     }
 
-    moveClassBoundaryLeftmost() {
-        this.ip.setClassBoundary(-1)
+    moveClassBoundaryFurthermost(direction = DIRECTION.RIGHT) {
+        switch (direction) {
+            case DIRECTION.RIGHT:
+                this.ip.setClassBoundary(this.ip.getSubnetBoundaryPosEnd())
+                break
+            case DIRECTION.LEFT:
+                this.ip.setClassBoundary(-1)
+                break;
+        }
         this.refreshClassBoundary()
     }
 
-    moveClassBoundaryRightmost() {
-        this.ip.setClassBoundary(this.ip.getSubnetBoundaryPosEnd())
-        this.refreshClassBoundary()
+
+    moveClassBoundaryBlockly() {
     }
 
     moveSubnetBoundary(move = 1) {

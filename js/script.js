@@ -1,6 +1,7 @@
 // script.js
 import {IP} from './IP.js';
-// import * as CONSTANTS from './constants.js';
+import {DIRECTION} from "./constants.js";
+
 import {Layout} from './layout.js'
 
 const ip = new IP()
@@ -22,10 +23,10 @@ document.addEventListener('keydown',
                     layout.moveSubnetBoundaryRightmost()
                     break;
                 case 'a':
-                    layout.moveClassBoundaryLeftmost()
+                    layout.moveClassBoundaryFurthermost(DIRECTION.LEFT)
                     break;
                 case 'd':
-                    layout.moveClassBoundaryRightmost()
+                    layout.moveClassBoundaryFurthermost()
                     break;
             }
         } else
