@@ -96,11 +96,11 @@ export class IP {
         for (let segment of rawIPSegments) {
             let formattedSeg = ''
             for (let bit of segment) {
-                bitCounter++
                 formattedSeg += bit
                 if (bitCounter % CONSTANTS.OCTET_LEN === 7 && bitCounter < CONSTANTS.IP_END_POS) {
                     formattedSeg += '.'
                 }
+                bitCounter++
             }
             formattedIP.push(formattedSeg)
         }
