@@ -1,11 +1,11 @@
 // IP.js
-import * as CONSTANTS from './constants.js';
+import * as CONST from './constants.js';
 
 export class IP {
     constructor() {
         this._boundaries = [
-            CONSTANTS.DEFAULT_CLASS_LENGTH - 1, // Boundary between class and subnet range
-            CONSTANTS.IP_MAX_LEN - CONSTANTS.DEFAULT_HOST_LENGTH - 1 // Boundary between subnet and host range
+            CONST.DEFAULT_CLASS_LENGTH - 1, // Boundary between class and subnet range
+            CONST.IP_MAX_LEN - CONST.DEFAULT_HOST_LENGTH - 1 // Boundary between subnet and host range
         ]
         this.decimals = [];
         //
@@ -20,7 +20,7 @@ export class IP {
 
     _generateOctet() {
         /* Generate from 0~255 unsigned. */
-        return this._generateRandom(0, 2 ** CONSTANTS.OCTET_LEN)
+        return this._generateRandom(0, 2 ** CONST.OCTET_LEN)
     }
 
     generateIP() {
@@ -32,7 +32,7 @@ export class IP {
 
     _transDec2Bin8(octet) {
         /* Receive an integer, return a string showing an 8-bit value. */
-        return octet.toString(2).padStart(CONSTANTS.OCTET_LEN, "0")
+        return octet.toString(2).padStart(CONST.OCTET_LEN, "0")
     }
 
     toBin32(ip = this.decimals) {
@@ -54,7 +54,7 @@ export class IP {
     }
 
     _getHostBitRange() {
-        return [this.getHostBoundaryPosStart(), CONSTANTS.IP_MAX_LEN]
+        return [this.getHostBoundaryPosStart(), CONST.IP_MAX_LEN]
     }
 
     getIPSegmentRanges() {
@@ -97,7 +97,7 @@ export class IP {
             let formattedSeg = ''
             for (let bit of segment) {
                 formattedSeg += bit
-                if (bitCounter % CONSTANTS.OCTET_LEN === 7 && bitCounter < CONSTANTS.IP_END_POS) {
+                if (bitCounter % CONST.OCTET_LEN === 7 && bitCounter < CONST.IP_END_POS) {
                     formattedSeg += '.'
                 }
                 bitCounter++
@@ -116,7 +116,7 @@ export class IP {
     }
 
     getHostBitLength() {
-        return CONSTANTS.IP_END_POS - this.getSubnetBoundaryPosEnd() + 1
+        return CONST.IP_END_POS - this.getSubnetBoundaryPosEnd() + 1
     }
 
     /* Class bits */
@@ -154,21 +154,21 @@ export class IP {
     }
 
     getIPEndPos() {
-        return CONSTANTS.IP_MAX_LEN - 1
+        return CONST.IP_MAX_LEN - 1
     }
 
     /*Subnet mask*/
 
     getSubnetMask() {
         let mask = [0, 0, 0, 0]
-        let fullMaskSets = Math.floor(this.getSubnetBoundaryNotation() / CONSTANTS.OCTET_LEN)
-        let partialMask = this.getSubnetBoundaryNotation() % CONSTANTS.OCTET_LEN
+        let fullMaskSets = Math.floor(this.getSubnetBoundaryNotation() / CONST.OCTET_LEN)
+        let partialMask = this.getSubnetBoundaryNotation() % CONST.OCTET_LEN
         let octetPos = 0
         for (; octetPos < fullMaskSets; octetPos++) {
-            mask[octetPos] = CONSTANTS.OCTET_MAX_VALUE
+            mask[octetPos] = CONST.OCTET_MAX_VALUE
         }
         if (partialMask) {
-            let offset = CONSTANTS.OCTET_LEN - partialMask
+            let offset = CONST.OCTET_LEN - partialMask
             mask[octetPos] = (2 ** partialMask - 1) << offset
         }
         return mask
@@ -191,7 +191,7 @@ export class IP {
     }
 
     setSubnetBoundary(pos) {
-        if (pos <= CONSTANTS.SUBNET_RIGHTMOST_BOUNDARY_POS && pos >= this.getClassBoundaryPosEnd())
+        if (pos <= CONST.SUBNET_RIGHTMOST_BOUNDARY_POS && pos >= this.getClassBoundaryPosEnd())
             this._boundaries[1] = pos
     }
 

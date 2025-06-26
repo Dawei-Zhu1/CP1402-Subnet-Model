@@ -11,8 +11,9 @@ layout.refreshAll()
 document.addEventListener('keydown',
     (event) => {
         let keyName = event.key
-        // let keycode = event.code
-        event.preventDefault()
+        // let keyCode = event.code
+        // event.preventDefault()
+        // console.log(keyCode)
         // Ctrl/CMD + Key
         if (event.ctrlKey || event.metaKey) {
             switch (keyName) {
@@ -29,17 +30,32 @@ document.addEventListener('keydown',
                     layout.moveClassBoundaryFurthermost()
                     break;
             }
+        } else if (event.shiftKey) {
+            switch (keyName) {
+                case 'A':
+                    layout.moveClassBoundaryBlockly(DIRECTION.LEFT)
+                    break;
+                case 'D':
+                    layout.moveClassBoundaryBlockly()
+                    break;
+                case 'ArrowLeft':
+                    layout.moveSubnetBoundaryBlockly(DIRECTION.LEFT)
+                    break;
+                case 'ArrowRight':
+                    layout.moveSubnetBoundaryBlockly()
+                    break;
+            }
         } else
             // Single key
             switch (keyName) {
                 case'ArrowLeft':
-                    layout.moveSubnetBoundary(-1)
+                    layout.moveSubnetBoundary(DIRECTION.LEFT)
                     break;
                 case 'ArrowRight':
                     layout.moveSubnetBoundary()
                     break;
                 case 'a':
-                    layout.moveClassBoundary(-1)
+                    layout.moveClassBoundary(DIRECTION.LEFT)
                     break;
                 case 'd':
                     layout.moveClassBoundary()

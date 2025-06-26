@@ -1,4 +1,4 @@
-import * as CONSTANTS from "./constants.js";
+import * as CONST from "./constants.js";
 import {DIRECTION} from "./constants.js";
 
 export class Layout {
@@ -65,7 +65,6 @@ export class Layout {
     */
     moveClassBoundary(move = 1) {
         let newPos = this.ip.getClassBoundaryPosEnd() + move
-
         if (newPos >= -1 && newPos < this.ip.getSubnetBoundaryPosEnd()) {
             this.ip.setClassBoundary(newPos)
         } else return
@@ -86,14 +85,32 @@ export class Layout {
     }
 
 
-    moveClassBoundaryBlockly() {
+    moveClassBoundaryBlockly(direction = DIRECTION.RIGHT) {
+        let _direction = direction;
+        let _subnetBoundaryEnd = this.ip.getSubnetBoundaryPosEnd()
+        let curPos = this.ip.getClassBoundaryPosEnd()
+        let predictedMove = curPos + _direction * CONST.OCTET_LEN
+        if (-1 <= (predictedMove) && predictedMove <= _subnetBoundaryEnd && !((curPos + 1) % CONST.OCTET_LEN)) {
+            console.log(curPos)
+            this.ip.setClassBoundary(predictedMove)
+            this.refreshSubnetBoundary()
+            this.refreshClassBoundary()
+        }
+    }
+
+    moveSubnetBoundaryBlockly(direction = DIRECTION.RIGHT) {
+        let _direction = direction;
+        let curPos = this.ip.getClassBoundaryNotation()
+        if (!curPos % CONST.OCTET_LEN) {
+            this.ip.setClassBoundary(curPos + _direction * CONST.OCTET_LEN)
+            this.refreshSubnetBoundary()
+        }
     }
 
     moveSubnetBoundary(move = 1) {
         let newPos = this.ip.getSubnetBoundaryPosEnd() + move
-        if (this.ip.getClassBoundaryPosEnd() <= newPos && newPos <= CONSTANTS.SUBNET_RIGHTMOST_BOUNDARY_POS) {
+        if (this.ip.getClassBoundaryPosEnd() <= newPos && newPos <= CONST.SUBNET_RIGHTMOST_BOUNDARY_POS) {
             this.ip.setSubnetBoundary(newPos)
-
             this.refreshSubnetBoundary()
         }
     }
@@ -104,7 +121,7 @@ export class Layout {
                 this.ip.setSubnetBoundary(this.ip.getClassBoundaryPosEnd())
                 break;
             case DIRECTION.RIGHT:
-                this.ip.setSubnetBoundary(CONSTANTS.SUBNET_RIGHTMOST_BOUNDARY_POS)
+                this.ip.setSubnetBoundary(CONST.SUBNET_RIGHTMOST_BOUNDARY_POS)
                 break
         }
         this.refreshSubnetBoundary()
