@@ -2,14 +2,12 @@
 import * as CONST from './constants.js';
 
 export class IP {
-    constructor() {
+    constructor(fourOctets) {
         this._boundaries = [
             CONST.DEFAULT_CLASS_LENGTH - 1, // Boundary between class and subnet range
             CONST.IP_MAX_LEN - CONST.DEFAULT_HOST_LENGTH - 1 // Boundary between subnet and host range
         ]
-        this.decimals = [];
-        //
-        this.generateIP()
+        this.decimals = fourOctets ?? this.generateIP();
     }
 
     _generateRandom(min, max) {
@@ -25,9 +23,11 @@ export class IP {
 
     generateIP() {
         /* Generate the octet four times */
+        let _ = []
         for (let i = 0; i < 4; i++) {
-            this.decimals.push(this._generateOctet())
+            _.push(this._generateOctet())
         }
+        return _
     }
 
     _transDec2Bin8(octet) {
@@ -202,6 +202,16 @@ export class IP {
         } else {
             this._boundaries[1] = pos
         }
+    }
+
+    // IP Calculation
+    add(IP) {
+        // let _ipA = this.getIP().reverse()
+        // let _ipB = IP.getIP().reverse()
+        // let result = new IP()
+        this.decimals = this.generateIP()
+        // for (i of _ipA)
+        //     console.log(this)
     }
 
 
