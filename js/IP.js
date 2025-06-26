@@ -219,7 +219,7 @@ export class IP {
             // Addition
             let sum = octet + _ipB[index] + _overflow
             // Check overflow for current octet
-            _overflow = sum > 0xff ? sum - 0xff : 0
+            _overflow = sum > 0xff ? Math.floor(sum / 256) : 0
             result.push(_overflow ? sum - 0x0100 : sum)
         }
         console.log(result.reverse())
