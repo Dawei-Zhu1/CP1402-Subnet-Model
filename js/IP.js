@@ -120,7 +120,7 @@ export class IP {
     }
 
     getHostBitLength() {
-        return CONST.IP_END_POS - this.getSubnetBoundaryPosEnd() + 1
+        return CONST.IP_END_POS - this.getSubnetBoundaryPosEnd()
     }
 
     /* Class bits */
