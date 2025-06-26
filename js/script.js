@@ -46,23 +46,22 @@ document.addEventListener('keydown',
                     break;
             }
         } else if (event.altKey) {
-            console.log(keyCode)
-        } else
+        } else {
             // Single key
-            switch (keyName) {
-                case'ArrowLeft':
-                    layout.moveSubnetBoundary(DIRECTION.LEFT)
-                    break;
-                case 'ArrowRight':
-                    layout.moveSubnetBoundary()
-                    break;
+            switch (keyCode) {
                 case 'KeyA':
                     layout.moveClassBoundary(DIRECTION.LEFT)
                     break;
                 case 'KeyD':
                     layout.moveClassBoundary()
                     break;
+                case'ArrowLeft':
+                    layout.moveSubnetBoundary(DIRECTION.LEFT)
+                    break;
+                case 'ArrowRight':
+                    layout.moveSubnetBoundary()
+                    break;
             }
-
+        }
     }
 )
