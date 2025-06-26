@@ -1,6 +1,7 @@
 import * as CONST from "./constants.js";
 import {DIRECTION} from "./constants.js";
 
+
 export class Layout {
     constructor(ip) {
         this.ip = ip
@@ -65,10 +66,7 @@ export class Layout {
     */
     moveClassBoundary(move = 1) {
         let newPos = this.ip.getClassBoundaryPosEnd() + move
-        if (newPos >= -1 && newPos < this.ip.getSubnetBoundaryPosEnd()) {
-            this.ip.setClassBoundary(newPos)
-        } else return
-
+        this.ip.setClassBoundary(newPos)
         this.refreshClassBoundary()
     }
 
@@ -84,27 +82,43 @@ export class Layout {
         this.refreshClassBoundary()
     }
 
+    _moveBlockly(direction = DIRECTION.RIGHT, curPos, fun) {
+        let _direction = direction;
+        let _curPos = curPos
+        if (!((_curPos + 1) % CONST.OCTET_LEN)) {
+            let predictedMove = _curPos + _direction * CONST.OCTET_LEN
+            fun(predictedMove)
+        } else {
+            let modValue = mod((-_direction * _curPos), CONST.OCTET_LEN)
+            fun(_curPos + _direction * (modValue) - 1)
+        }
+    }
 
     moveClassBoundaryBlockly(direction = DIRECTION.RIGHT) {
         let _direction = direction;
-        let _subnetBoundaryEnd = this.ip.getSubnetBoundaryPosEnd()
         let curPos = this.ip.getClassBoundaryPosEnd()
-        let predictedMove = curPos + _direction * CONST.OCTET_LEN
-        if (-1 <= (predictedMove) && predictedMove <= _subnetBoundaryEnd && !((curPos + 1) % CONST.OCTET_LEN)) {
-            console.log(curPos)
+        if (!((curPos + 1) % CONST.OCTET_LEN)) {
+            let predictedMove = curPos + _direction * CONST.OCTET_LEN
             this.ip.setClassBoundary(predictedMove)
-            this.refreshSubnetBoundary()
-            this.refreshClassBoundary()
+        } else {
+            let modValue = mod((-_direction * curPos), CONST.OCTET_LEN)
+            this.ip.setClassBoundary(curPos + _direction * (modValue) - 1)
         }
+        this.refreshSubnetBoundary()
+        this.refreshClassBoundary()
     }
 
     moveSubnetBoundaryBlockly(direction = DIRECTION.RIGHT) {
         let _direction = direction;
-        let curPos = this.ip.getClassBoundaryNotation()
-        if (!curPos % CONST.OCTET_LEN) {
-            this.ip.setClassBoundary(curPos + _direction * CONST.OCTET_LEN)
-            this.refreshSubnetBoundary()
+        let _curPos = this.ip.getSubnetBoundaryPosEnd()
+        if (!((_curPos + 1) % CONST.OCTET_LEN)) {
+            let predictedMove = _curPos + _direction * CONST.OCTET_LEN
+            this._setSubnetBoundary(predictedMove)
+        } else {
+            let modValue = mod((-_direction * _curPos), CONST.OCTET_LEN)
+            this._setSubnetBoundary(_curPos + _direction * (modValue) - 1)
         }
+        this.refreshSubnetBoundary()
     }
 
     moveSubnetBoundary(move = 1) {
@@ -150,4 +164,16 @@ export class Layout {
         this.updateData()
     }
 
+    _setClassBoundary(value) {
+        this.ip.setClassBoundary(value)
+    }
+
+    _setSubnetBoundary(value) {
+        this.ip.setSubnetBoundary(value)
+    }
+
+}
+
+function mod(n, m) {
+    return ((n % m) + m) % m
 }

@@ -120,7 +120,7 @@ export class IP {
     }
 
     /* Class bits */
-    getClassBoundaryStartPos() {
+    getClassBoundaryPosStart() {
         return 0
     }
 
@@ -185,14 +185,23 @@ export class IP {
 
 
     setClassBoundary(pos) {
-        if (pos >= -1 && pos <= this.getSubnetBoundaryPosEnd()) {
+        if (pos > this.getSubnetBoundaryPosEnd()) {
+            this._boundaries[0] = this.getSubnetBoundaryPosEnd()
+        } else if (pos < -1) {
+            this._boundaries[0] = -1
+        } else {
             this._boundaries[0] = pos
         }
     }
 
     setSubnetBoundary(pos) {
-        if (pos <= CONST.SUBNET_RIGHTMOST_BOUNDARY_POS && pos >= this.getClassBoundaryPosEnd())
+        if (pos > CONST.SUBNET_RIGHTMOST_BOUNDARY_POS) {
+            this._boundaries[1] = CONST.SUBNET_RIGHTMOST_BOUNDARY_POS
+        } else if (pos < this.getClassBoundaryPosEnd()) {
+            this._boundaries[1] = this.getClassBoundaryPosEnd()
+        } else {
             this._boundaries[1] = pos
+        }
     }
 
 
