@@ -72,7 +72,7 @@ export class IP {
     }
 
     getIP() {
-        return this.decimals
+        return [...this.decimals]
     }
 
     _getIPSegmentsRaw(ip = this.getIP()) {
