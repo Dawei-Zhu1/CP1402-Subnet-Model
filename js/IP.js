@@ -210,9 +210,8 @@ export class IP {
 
     // IP Calculation
     add(IP) {
-        let _ipA = [0, 255, 255, 255].reverse()
-        let _ipB = [0, 0, 0, 1]
-        // let _ipB = IP.getIP().reverse()
+        let _ipA = IP.reverse()
+        let _ipB = [0, 0, 0, 1].reverse()
         let result = []
         let _overflow = 0
         _ipB.reverse()
