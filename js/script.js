@@ -11,31 +11,31 @@ layout.refreshAll()
 document.addEventListener('keydown',
     (event) => {
         let keyName = event.key
-        // let keyCode = event.code
+        let keyCode = event.code
         // event.preventDefault()
         // console.log(keyCode)
         // Ctrl/CMD + Key
         if (event.ctrlKey || event.metaKey) {
-            switch (keyName) {
+            switch (keyCode) {
                 case 'ArrowLeft':
                     layout.moveSubnetBoundaryFurthermost(DIRECTION.LEFT)
                     break;
                 case 'ArrowRight':
                     layout.moveSubnetBoundaryFurthermost()
                     break;
-                case 'a':
+                case 'KeyA':
                     layout.moveClassBoundaryFurthermost(DIRECTION.LEFT)
                     break;
-                case 'd':
+                case 'KeyD':
                     layout.moveClassBoundaryFurthermost()
                     break;
             }
         } else if (event.shiftKey) {
-            switch (keyName) {
-                case 'A':
+            switch (keyCode) {
+                case 'KeyA':
                     layout.moveClassBoundaryBlockly(DIRECTION.LEFT)
                     break;
-                case 'D':
+                case 'KeyD':
                     layout.moveClassBoundaryBlockly()
                     break;
                 case 'ArrowLeft':
@@ -45,6 +45,8 @@ document.addEventListener('keydown',
                     layout.moveSubnetBoundaryBlockly()
                     break;
             }
+        } else if (event.altKey) {
+            console.log(keyCode)
         } else
             // Single key
             switch (keyName) {
@@ -54,10 +56,10 @@ document.addEventListener('keydown',
                 case 'ArrowRight':
                     layout.moveSubnetBoundary()
                     break;
-                case 'a':
+                case 'KeyA':
                     layout.moveClassBoundary(DIRECTION.LEFT)
                     break;
-                case 'd':
+                case 'KeyD':
                     layout.moveClassBoundary()
                     break;
             }
