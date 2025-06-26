@@ -51,7 +51,7 @@ export class Layout {
         document.getElementById("subnet_capacity").innerHTML = `2 ^ (${this.ip.getSubnetBitLength()}) = ${2 ** this.ip.getSubnetBitLength()}`
     }
 
-    updateHostCapacity(){
+    updateHostCapacity() {
         document.getElementById("host_capacity").innerHTML = `2 ^ (${this.ip.getHostBitLength()}) - 2 = ${2 ** this.ip.getHostBitLength() - 2}`
     }
 

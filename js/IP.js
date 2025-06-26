@@ -107,12 +107,16 @@ export class IP {
         return formattedIP
     }
 
+    getClassBitLength() {
+        return this.getClassBoundaryPosEnd() + 1
+    }
+
     getSubnetBitLength() {
-        return this.getSubnetBoundaryPosEnd() - this.getClassBoundaryPosEnd()
+        return this.getSubnetBoundaryPosEnd() - this.getSubnetBoundaryPosStart() + 1
     }
 
     getHostBitLength() {
-        return CONSTANTS.IP_MAX_LEN - this.getSubnetBoundaryNotation()
+        return CONSTANTS.IP_END_POS - this.getSubnetBoundaryPosEnd() + 1
     }
 
     /* Class bits */
@@ -178,6 +182,7 @@ export class IP {
     getFormattedMaskSegments() {
         return this.getFormattedIPSegments(this.getSubnetMaskBin32())
     }
+
 
     setClassBoundary(pos) {
         if (pos >= -1 && pos <= this.getSubnetBoundaryPosEnd()) {
