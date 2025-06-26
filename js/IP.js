@@ -10,6 +10,10 @@ export class IP {
         this.decimals = fourOctets ?? this.generateIP();
     }
 
+    valueOf() {
+        return this.ip
+    }
+
     _generateRandom(min, max) {
         /* Generate a random number, exclusive of max*/
         let randomNumber = Math.random() * (max - min) + min;
@@ -206,13 +210,20 @@ export class IP {
 
     // IP Calculation
     add(IP) {
-        // let _ipA = this.getIP().reverse()
+        let _ipA = [0, 255, 255, 255].reverse()
+        let _ipB = [0, 0, 0, 1]
         // let _ipB = IP.getIP().reverse()
-        // let result = new IP()
-        this.decimals = this.generateIP()
-        // for (i of _ipA)
-        //     console.log(this)
+        let result = []
+        let _overflow = 0
+        _ipB.reverse()
+        for (let [index, octet] of _ipA.entries()) {
+            // Addition
+            let sum = octet + _ipB[index] + _overflow
+            // Check overflow for current octet
+            _overflow = sum > 0xff ? sum - 0xff : 0
+            result.push(_overflow ? sum - 0x0100 : sum)
+        }
+        console.log(result.reverse())
+        return result
     }
-
-
 }
