@@ -7,6 +7,10 @@
     <title>Subnet Example</title>
 </head>
 <link rel="stylesheet" href="style.css">
+<script type="module" src="./js/constants.js"></script>
+<script type="module" src="./js/IP.js"></script>
+<script type="module" src="./js/layout.js"></script>
+<script type="module" src="./js/script.js"></script>
 <body>
 <div id="container">
     <h1>Subnet Example</h1>
@@ -131,14 +135,14 @@
                     <div>
                         <label for="subnet_type"></label>
                         <input type="button" name="subnet_type" value="&lt;&lt;"
-                               onclick="ip.class_boundary_far_left_shift();draw(ip)">
+                               onclick="layout.moveClassBoundaryFurthermost(-1)">
                         <input type="button" name="subnet_type" value="&lt;"
-                               onclick="ip.class_boundary_shift_left();draw(ip)">
+                               onclick="layout.moveClassBoundary(-1)">
                         <span>Provider Subnet</span>
                         <input type="button" name="subnet_type" value=" &gt;"
-                               onclick="ip.class_boundary_shift_right();draw(ip)">
+                               onclick="layout.moveClassBoundary()">
                         <input type="button" name="subnet_type" value="&gt;&gt;"
-                               onclick="ip.class_boundary_far_right_shift();draw(ip)">
+                               onclick="layout.moveClassBoundaryFurthermost()">
                     </div>
                 </menu>
             </div>
@@ -151,8 +155,5 @@
 </footer>
 </body>
 
-<script type="module" src="./js/constants.js"></script>
-<script type="module" src="./js/IP.js"></script>
-<script type="module" src="./js/layout.js"></script>
-<script type="module" src="./js/script.js"></script>
+
 </html>

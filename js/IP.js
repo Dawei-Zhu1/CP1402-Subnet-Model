@@ -31,7 +31,7 @@ export class IP {
         for (let i = 0; i < 4; i++) {
             _.push(this._generateOctet())
         }
-        return _
+        return new Uint8Array(_)
     }
 
     _transDec2Bin8(octet) {
@@ -210,11 +210,10 @@ export class IP {
 
     // IP Calculation
     add(IP) {
-        let _ipA = IP.reverse()
-        let _ipB = [0, 0, 0, 1].reverse()
+        let _ipA = new Uint8Array(IP).reverse()
+        let _ipB = this.getIP().reverse()
         let result = []
         let _overflow = 0
-        _ipB.reverse()
         for (let [index, octet] of _ipA.entries()) {
             // Addition
             let sum = octet + _ipB[index] + _overflow
@@ -222,7 +221,9 @@ export class IP {
             _overflow = sum > 0xff ? Math.floor(sum / 256) : 0
             result.push(_overflow ? sum - 0x0100 : sum)
         }
-        console.log(result.reverse())
+        // console.log(`${_ipA.reverse()} + ${_ipB.reverse()} = ${result.reverse()}`)
+        this.decimals = result.reverse()
+
         return result
     }
 }

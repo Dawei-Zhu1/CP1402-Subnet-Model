@@ -29,8 +29,14 @@ document.addEventListener('keydown',
                 case 'KeyD':
                     layout.moveClassBoundaryFurthermost()
                     break;
+                case 'ArrowUp':
+                    layout.adjustIPValue([0, 0, 0, 64])
+                    break;
+                case 'ArrowDown':
+                    layout.adjustIPValue([-1, -1, -1, -64])
+                    break;
             }
-        } else if (event.shiftKey) {
+        } else if (event.altKey) {
             switch (keyCode) {
                 case 'KeyA':
                     layout.moveClassBoundaryBlockly(DIRECTION.LEFT)
@@ -44,8 +50,28 @@ document.addEventListener('keydown',
                 case 'ArrowRight':
                     layout.moveSubnetBoundaryBlockly()
                     break;
+                case 'ArrowUp':
+                    layout.adjustIPValue([0, 0, 64, 0])
+                    break;
+                case 'ArrowDown':
+                    layout.adjustIPValue([-1, -1, -64, 0])
+                    break;
             }
-        } else if (event.altKey) {
+        } else if (event.shiftKey) {
+            switch (keyCode) {
+                case 'KeyW':
+                    layout.adjustIPValue([0, 0, 64, 0])
+                    break;
+                case 'KeyS':
+                    layout.adjustIPValue([-1, -1, -64, 0])
+                    break;
+                case 'ArrowUp':
+                    layout.adjustIPValue([0, 0, 0, 64])
+                    break;
+                case 'ArrowDown':
+                    layout.adjustIPValue([-1, -1, -1, -64])
+                    break;
+            }
         } else {
             // Single key
             switch (keyCode) {
@@ -55,11 +81,23 @@ document.addEventListener('keydown',
                 case 'KeyD':
                     layout.moveClassBoundary()
                     break;
+                case 'KeyW':
+                    layout.adjustIPValue([0, 0, 1, 0])
+                    break;
+                case 'KeyS':
+                    layout.adjustIPValue([-1, -1, -1, 0])
+                    break
                 case'ArrowLeft':
                     layout.moveSubnetBoundary(DIRECTION.LEFT)
                     break;
                 case 'ArrowRight':
                     layout.moveSubnetBoundary()
+                    break;
+                case 'ArrowUp':
+                    layout.adjustIPValue()
+                    break;
+                case 'ArrowDown':
+                    layout.adjustIPValue([-1, -1, -1, -1])
                     break;
             }
         }

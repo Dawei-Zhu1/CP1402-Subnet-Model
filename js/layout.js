@@ -172,6 +172,12 @@ export class Layout {
         this.ip.setSubnetBoundary(value)
     }
 
+    adjustIPValue(increment = [0, 0, 0, 1]) {
+        this.ip.add(increment)
+        this.displayBinaryIP()
+        this.displayDecimalIP()
+    }
+
 }
 
 function mod(n, m) {
