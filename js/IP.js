@@ -208,6 +208,17 @@ export class IP {
         }
     }
 
+    getFirstSubnetIP() {
+        let mask = this.getSubnetMask()
+        let curIp = this.getIP()
+        let result = []
+        for (let [index, ipOctet] of curIp.entries()) {
+            result.push(ipOctet & mask[index])
+        }
+        console.log(result)
+        return result
+    }
+
     // IP Calculation
     add(IP) {
         let _ipA = new Uint8Array(IP).reverse()

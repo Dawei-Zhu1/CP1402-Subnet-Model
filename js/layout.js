@@ -40,6 +40,10 @@ export class Layout {
         }
     }
 
+    displayFirstSubnet() {
+        document.getElementById('subnet_of_this_ip_dec').innerText = this.ip.getFirstSubnetIP().join('.')
+    }
+
     // // Display First Subnet address
     // var first_subnet_bin = ip.provided_mask & ip.bin
     // document.getElementById("first_subnet").innerText = bin_to_256nary(first_subnet_bin).join(".")
@@ -143,11 +147,16 @@ export class Layout {
 
 
     refreshAll() {
+        // IP
         this.displaySlashMask()
         this.displayDecimalIP()
         this.displayBinaryIP()
+        // Mask
         this.displayDecimalMask()
         this.displayBinaryMask()
+        // Subnet
+        this.displayFirstSubnet()
+        // Data
         this.updateData()
     }
 
@@ -161,7 +170,10 @@ export class Layout {
         this.displayBinaryIP()
         this.displayBinaryMask()
         this.displayDecimalMask()
+        this.displaySlashMask()
         this.updateData()
+        this.displayFirstSubnet()
+
     }
 
     _setClassBoundary(value) {
@@ -176,6 +188,16 @@ export class Layout {
         this.ip.add(increment)
         this.displayBinaryIP()
         this.displayDecimalIP()
+    }
+
+    adjustSubnetValue(increment = 1) {
+        let _incrementSet = new Uint8Array(4)
+        let position = this.ip.getSubnetBoundaryPosEnd()
+        let octetIndex = Math.floor(position / 8)
+        let bitPosInOctet = CONST.OCTET_LEN - position % CONST.OCTET_LEN
+        _incrementSet[octetIndex] = increment << (bitPosInOctet - 1)
+        this.adjustIPValue(_incrementSet)
+        this.refreshSubnetBoundary()
     }
 
 }

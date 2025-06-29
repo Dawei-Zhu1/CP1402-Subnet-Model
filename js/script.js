@@ -16,6 +16,42 @@ document.addEventListener('keydown',
         // console.log(keyCode)
         // Ctrl/CMD + Key
         if (event.ctrlKey || event.metaKey) {
+            // switch (keyCode) {
+            //     case 'ArrowUp':
+            //         layout.adjustIPValue([0, 0, 0, 32])
+            //         break;
+            //     case 'ArrowDown':
+            //         layout.adjustIPValue([-1, -1, -1, -64])
+            //         break;
+            // }
+        } else if (event.altKey) {
+            switch (keyCode) {
+                case 'KeyA':
+                    layout.moveClassBoundaryBlockly(DIRECTION.LEFT)
+                    break;
+                case 'KeyD':
+                    layout.moveClassBoundaryBlockly()
+                    break;
+                case 'KeyW':
+                    layout.adjustIPValue([0, 0, 32, 0])
+                    break;
+                case 'KeyS':
+                    layout.adjustIPValue([-1, -1, -32, 0])
+                    break;
+                case 'ArrowLeft':
+                    layout.moveSubnetBoundaryBlockly(DIRECTION.LEFT)
+                    break;
+                case 'ArrowRight':
+                    layout.moveSubnetBoundaryBlockly()
+                    break;
+                case 'ArrowUp':
+                    layout.adjustIPValue([0, 0, 0, 32])
+                    break;
+                case 'ArrowDown':
+                    layout.adjustIPValue([-1, -1, -1, -32])
+                    break;
+            }
+        } else if (event.shiftKey) {
             switch (keyCode) {
                 case 'ArrowLeft':
                     layout.moveSubnetBoundaryFurthermost(DIRECTION.LEFT)
@@ -29,36 +65,7 @@ document.addEventListener('keydown',
                 case 'KeyD':
                     layout.moveClassBoundaryFurthermost()
                     break;
-                case 'ArrowUp':
-                    layout.adjustIPValue([0, 0, 0, 64])
-                    break;
-                case 'ArrowDown':
-                    layout.adjustIPValue([-1, -1, -1, -64])
-                    break;
-            }
-        } else if (event.altKey) {
-            switch (keyCode) {
-                case 'KeyA':
-                    layout.moveClassBoundaryBlockly(DIRECTION.LEFT)
-                    break;
-                case 'KeyD':
-                    layout.moveClassBoundaryBlockly()
-                    break;
-                case 'ArrowLeft':
-                    layout.moveSubnetBoundaryBlockly(DIRECTION.LEFT)
-                    break;
-                case 'ArrowRight':
-                    layout.moveSubnetBoundaryBlockly()
-                    break;
-                case 'ArrowUp':
-                    layout.adjustIPValue([0, 0, 64, 0])
-                    break;
-                case 'ArrowDown':
-                    layout.adjustIPValue([-1, -1, -64, 0])
-                    break;
-            }
-        } else if (event.shiftKey) {
-            switch (keyCode) {
+
                 case 'KeyW':
                     layout.adjustIPValue([0, 0, 64, 0])
                     break;
@@ -82,10 +89,10 @@ document.addEventListener('keydown',
                     layout.moveClassBoundary()
                     break;
                 case 'KeyW':
-                    layout.adjustIPValue([0, 0, 1, 0])
+                    layout.adjustSubnetValue()
                     break;
                 case 'KeyS':
-                    layout.adjustIPValue([-1, -1, -1, 0])
+                    layout.adjustSubnetValue(-1)
                     break
                 case'ArrowLeft':
                     layout.moveSubnetBoundary(DIRECTION.LEFT)
