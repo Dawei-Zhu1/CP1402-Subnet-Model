@@ -179,8 +179,7 @@ export class IP {
     }
 
     getSubnetMaskBin32() {
-        let subnetMask = this.getSubnetMask()
-        return this.toBin32(subnetMask)
+        return this.toBin32(this.getSubnetMask())
     }
 
     getFormattedMaskSegments() {
