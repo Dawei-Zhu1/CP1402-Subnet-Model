@@ -53,11 +53,11 @@ export class Layout {
 
     // Update data
     updateSubnetCapacity() {
-        document.getElementById("subnet_capacity").innerHTML = `2 ^ (${this.ip.getSubnetBitLength()}) = ${2 ** this.ip.getSubnetBitLength()}`
+        document.getElementById("subnet_capacity").innerHTML = `2<sup>${this.ip.getSubnetBitLength()}</sup> = ${2 ** this.ip.getSubnetBitLength()}`
     }
 
     updateHostCapacity() {
-        document.getElementById("host_capacity").innerHTML = `2 ^ (${this.ip.getHostBitLength()}) - 2 = ${2 ** this.ip.getHostBitLength() - 2}`
+        document.getElementById("host_capacity").innerHTML = `2<sup>${this.ip.getHostBitLength()}</sup> - 2 = ${2 ** this.ip.getHostBitLength() - 2}`
     }
 
     updateData() {
