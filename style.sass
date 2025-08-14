@@ -1,0 +1,59 @@
+//Variables
+$SECTION-FONT: 24px
+$FONT: 'Courier New'
+//Mixins
+@mixin bit-style($color:unset, $font-weight:unset, $bg:unset)
+  color: $color
+  font-weight: $font-weight
+  background: $bg
+
+@mixin shadow($type: box, $color:black, $x:0, $y:0, $radius:16px, $spread:0, $position:null)
+  @if $type == 'text'
+    text-shadow: $color $x $y $radius
+  @else
+    box-shadow: $color $x $y $radius $spread $position
+
+*
+  padding: 0
+  margin: 0
+
+#container
+  margin: 0 2.5em
+
+h1
+  padding: 1rem
+
+
+h2
+  @extend h1
+  font-size: 1.5rem
+
+h3
+  @extend h1
+
+html
+  font-family: $FONT, Courier, monospace
+
+//Nesting
+#ipv4
+  span
+    font-size: $SECTION-FONT
+    display: inline
+    height: 32px
+    text-align: center
+    padding: 0 2.5px
+
+.ip_class_bits
+  @include bit-style(burlywood, lighter, darkmagenta)
+
+.subnet_bits
+  @include bit-style(red, light, lightgreen)
+
+.host_bits
+  @include bit-style(blueviolet, bold, gold)
+
+#subnet_mask
+  font-size: $SECTION-FONT
+
+#console
+  text-align: center
