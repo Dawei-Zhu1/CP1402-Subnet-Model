@@ -10,7 +10,7 @@ layout.refreshAll()
 
 document.addEventListener('keydown',
     (event) => {
-        let keyName = event.key
+        // let keyName = event.key
         let keyCode = event.code
         let kpc = event.charCode
         event.preventDefault()

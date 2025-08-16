@@ -49,9 +49,11 @@ export class Layout {
 
     /* Mask */
     displayDecimalMask() {
-        document
-            .getElementById("dec-mask")
-            .getElementsByTagName('span')[1].innerText = this.ip.getSubnetMask().join('.')
+        for (let [index, octet] of this.ip.getSubnetMask().entries()) {
+            document
+                .getElementById("dec-mask")
+                .getElementsByClassName("octet")[index].innerText = octet.toString()
+        }
     }
 
     // Insert binary mask
@@ -60,7 +62,7 @@ export class Layout {
         clearContentWithinClass(targetElements)
         /*Initialise*/
         let currentBitIndex = 0
-        for (let [index, eachPart] of this.ip.getFormattedIPSegments().entries()) {
+        for (let [index, eachPart] of this.ip.getFormattedMaskSegments().entries()) {
             let currentBitClass = CONST.CLASS_LIST[index]
             for (let i of eachPart) {
                 let newElement = document.createElement("span")
@@ -72,15 +74,15 @@ export class Layout {
             }
         }
     }
-
+    /*Subnet*/
     displayFirstSubnet() {
-        document.getElementById('subnet_of_this_ip_dec').innerText = this.ip.getFirstSubnetIP().join('.')
+        document.getElementById('dec-subnet').innerText = this.ip.getFirstSubnetIP().join('.')
     }
 
     displayFirstBinarySubnet() {
         for (let [index, segment] of this.ip.getFirstBinIpOfSubnet().entries()) {
-            document.getElementById('subnet_of_this_ip_bin')
-                .getElementsByClassName("segment")[index].innerText = segment
+            document.getElementById('dec-subnet').innerText = this.ip.getSubnetMask().join('.')
+                .getElementsByClassName("octet")[index].innerText = segment
         }
     }
 
