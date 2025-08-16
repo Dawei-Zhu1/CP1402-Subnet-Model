@@ -14,7 +14,7 @@ export class Layout {
         for (let [index, octet] of this.ip.decimals.entries()) {
             document
                 .getElementById("dec-ip")
-                .getElementsByClassName("octet")[index].innerText = octet.toString()
+                .getElementsByClassName("octet")[index].value = octet.toString()
         }
     }
 
@@ -49,6 +49,7 @@ export class Layout {
 
     /* Mask */
     displayDecimalMask() {
+        /*Write to input*/
         for (let [index, octet] of this.ip.getSubnetMask().entries()) {
             document
                 .getElementById("dec-mask")
@@ -74,6 +75,7 @@ export class Layout {
             }
         }
     }
+
     /*Subnet*/
     displayFirstSubnet() {
         document.getElementById('dec-subnet').innerText = this.ip.getFirstSubnetIP().join('.')
@@ -231,7 +233,14 @@ export class Layout {
         let position = this.ip.getSubnetBoundaryPosEnd()
         let octetIndex = Math.floor(position / 8)
         let bitPosInOctet = CONST.OCTET_LEN - position % CONST.OCTET_LEN
-        _incrementSet[octetIndex] = increment << (bitPosInOctet - 1)
+        if (increment === 1) {
+            _incrementSet[octetIndex] = increment << (bitPosInOctet - 1)
+        } else{
+            for(let i = 0; i < octetIndex; i++){
+                _incrementSet[i] = -1
+            }
+            _incrementSet[octetIndex] = (increment << (bitPosInOctet - 1))
+        }
         this.adjustIPValue(_incrementSet)
         this.refreshSubnetBoundary()
     }
