@@ -7,16 +7,23 @@ const ip = new IP()
 const layout = new Layout(ip);
 layout.displayBinaryIP()
 layout.refreshAll()
-
+/*Listener for inputs*/
+document.querySelectorAll("input.octet").forEach(e => {
+    e.addEventListener('input', (e) => {
+            layout.setIP()
+            layout.displayBinaryIP()
+        }
+    )
+})
 document.addEventListener('keydown',
     (event) => {
         // let keyName = event.key
         let keyCode = event.code
         let kpc = event.charCode
-        event.preventDefault()
+        // event.preventDefault()
         // console.log(keyCode)
         // Ctrl/CMD + Key
-        console.log(`'${kpc}',`)
+        // console.log(`'${kpc}',`)
         if (event.ctrlKey || event.metaKey) {
             // switch (keyCode) {
             //     case 'ArrowUp':

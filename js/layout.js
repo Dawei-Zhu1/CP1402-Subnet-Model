@@ -235,14 +235,29 @@ export class Layout {
         let bitPosInOctet = CONST.OCTET_LEN - position % CONST.OCTET_LEN
         if (increment === 1) {
             _incrementSet[octetIndex] = increment << (bitPosInOctet - 1)
-        } else{
-            for(let i = 0; i < octetIndex; i++){
+        } else {
+            for (let i = 0; i < octetIndex; i++) {
                 _incrementSet[i] = -1
             }
             _incrementSet[octetIndex] = (increment << (bitPosInOctet - 1))
         }
         this.adjustIPValue(_incrementSet)
         this.refreshSubnetBoundary()
+    }
+
+    fetchIP() {
+        /*Read input IP*/
+        let ip = document.querySelectorAll("input.octet")
+        let values = new Uint8Array(4)
+        for (let [index, content] of ip.entries()){
+            values[index] = Number(content.value)
+        }
+        return values
+    }
+
+    setIP() {
+        let newIP = this.fetchIP()
+        this.ip.modifyIP(newIP)
     }
 }
 

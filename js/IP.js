@@ -11,7 +11,7 @@ export class IP {
     }
 
     valueOf() {
-        return this.ip
+        return this.decimals
     }
 
     _generateRandom(min, max) {
@@ -193,7 +193,9 @@ export class IP {
         return this.getFormattedIPSegments(this.getFirstBinIpOfSubnet())
     }
 
-
+    modifyIP(ip){
+        this.decimals = ip
+    }
     setClassBoundary(pos) {
         if (pos > this.getSubnetBoundaryPosEnd()) {
             this._boundaries[0] = this.getSubnetBoundaryPosEnd()
