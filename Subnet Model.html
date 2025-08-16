@@ -7,6 +7,8 @@
     <title>Subnet Example</title>
 </head>
 <link rel="stylesheet" href="style.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 <script type="module" src="./js/constants.js"></script>
 <script type="module" src="./js/IP.js"></script>
 <script type="module" src="./js/layout.js"></script>
@@ -48,32 +50,33 @@
             </div>
             <div id="ip_bin">
                 <span>Bin: </span>
-                <span class="host_bits">
-							<span class="subnet_bits">
-								<span class="subnet_class_bits">
-									<span class="segment ip_class_bits">1</span>
-								</span>
-								<span class="segment subnet_bits">a</span>
-							</span>
-							<span class="segment host_bits">a</span>
-						</span>
-                <span class="slashed_mask"></span>
+                <span class="octet"></span>
+                <span class="ip_separator">.</span>
 
+                <span class="octet"></span>
+                <span class="ip_separator">.</span>
+
+                <span class="octet"></span>
+                <span class="ip_separator">.</span>
+
+                <span class="octet"></span>
+                <span class="slashed_mask"></span>
             </div>
-            <div id='dashboard'>
-                <div id="info">
-                    <h2>Subnet Info</h2>
-                    <div id="subnet_info">
-                        <div id="subnet_mask">
-                            <h3>Subnet Mask</h3>
-                            <div id="mask_dec">
-                                <span>Dec: </span>
-                                <span></span>
-                                <span class="slashed_mask"></span>
-                            </div>
-                            <div id="mask_bin">
-                                <span>Bin: </span>
-                                <span class="host_bits">
+        </div>
+        <div id='dashboard'>
+            <div id="info">
+                <h2>Subnet Info</h2>
+                <div id="subnet_info">
+                    <div id="subnet_mask">
+                        <h3>Subnet Mask</h3>
+                        <div id="mask_dec">
+                            <span>Dec: </span>
+                            <span></span>
+                            <span class="slashed_mask"></span>
+                        </div>
+                        <div id="mask_bin">
+                            <span>Bin: </span>
+                            <span class="host_bits">
 											<span class="subnet_bit_mask">
 												<span class="class_bit_mask">
 													<span class="segment ip_class_bits"></span>
@@ -82,18 +85,18 @@
 											</span>
 											<span class="segment host_bits"></span>
 										</span>
-                                <span class="slashed_mask"></span>
-                            </div>
+                            <span class="slashed_mask"></span>
                         </div>
+                    </div>
 
-                        <span>The random IP belongs to this subnet:</span><br/>
-                        <div>
-                            <span>Dec: </span>
-                            <span id="subnet_of_this_ip_dec"></span><span
-                                class="slashed_mask"></span></div>
-                        <div id="subnet_of_this_ip_bin">
-                            <span>Bin: </span>
-                            <span class="host_bits">
+                    <span>The random IP belongs to this subnet:</span><br/>
+                    <div>
+                        <span>Dec: </span>
+                        <span id="subnet_of_this_ip_dec"></span><span
+                            class="slashed_mask"></span></div>
+                    <div id="subnet_of_this_ip_bin">
+                        <span>Bin: </span>
+                        <span class="host_bits">
 										<span class="subnet_bits">
 											<span class="subnet_class_bits">
 												<span class="segment ip_class_bits"></span>
@@ -102,52 +105,51 @@
 										</span>
 										<span class="segment host_bits"></span>
 									</span>
-                            <span class="slashed_mask"></span>
-                        </div>
-                    </div>
-
-                    <div id="summary">
-                        <div id="bit_count">
-                            <span class="subnet_class_bits">Class bits: <span></span></span>
-                            <span class="subnet_bits">Subnet bits: <span id="subnet_count"></span></span>
-                            <span class="host_bits">host bits: <span id="host_count"></span></span><br/>
-                        </div>
-                        <p>This network can hold <span id="subnet_capacity"
-                                                          class="subnet_bits"></span> subnets.</p>
-                        <p>This subnet can hold <span id="host_capacity"
-                                                         class="host_bits"></span> hosts.</p><br/>
-
-
+                        <span class="slashed_mask"></span>
                     </div>
                 </div>
-                <menu id="console">
-                    <div>
-                        <label for="subnet_type"></label>
-                        <input type="button" name="subnet_type" value="&lt;&lt;"
-                               onclick="ip.subnet_boundary_far_left_shift();draw(ip)">
-                        <input type="button" name="subnet_type" value="&lt;"
-                               onclick="ip.subnet_boundary_shift_left();draw(ip)">
-                        <span>Subnet</span>
-                        <input type="button" name="subnet_type" value="&gt;"
-                               onclick="ip.subnet_boundary_shift_right(),draw(ip)">
-                        <input type="button" name="subnet_type" value="&gt;&gt;"
-                               onclick="ip.subnet_boundary_far_right_shift(),draw(ip)">
 
+                <div id="summary">
+                    <div id="bit_count">
+                        <span class="subnet_class_bits">Class bits: <span></span></span>
+                        <span class="subnet_bits">Subnet bits: <span id="subnet_count"></span></span>
+                        <span class="host_bits">host bits: <span id="host_count"></span></span><br/>
                     </div>
-                    <div>
-                        <label for="subnet_type"></label>
-                        <input type="button" name="subnet_type" value="&lt;&lt;"
-                               onclick="layout.moveClassBoundaryFurthermost(-1)">
-                        <input type="button" name="subnet_type" value="&lt;"
-                               onclick="layout.moveClassBoundary(-1)">
-                        <span>Provider Subnet</span>
-                        <input type="button" name="subnet_type" value=" &gt;"
-                               onclick="layout.moveClassBoundary()">
-                        <input type="button" name="subnet_type" value="&gt;&gt;"
-                               onclick="layout.moveClassBoundaryFurthermost()">
-                    </div>
-                </menu>
+                    <p>This network can hold <span id="subnet_capacity"
+                                                   class="subnet_bits"></span> subnets.</p>
+                    <p>This subnet can hold <span id="host_capacity"
+                                                  class="host_bits"></span> hosts.</p><br/>
+
+
+                </div>
             </div>
+            <menu id="console">
+                <div>
+                    <label for="subnet_type"></label>
+                    <input type="button" name="subnet_type" value="&lt;&lt;"
+                           onclick="ip.subnet_boundary_far_left_shift();draw(ip)">
+                    <input type="button" name="subnet_type" value="&lt;"
+                           onclick="ip.subnet_boundary_shift_left();draw(ip)">
+                    <span>Subnet</span>
+                    <input type="button" name="subnet_type" value="&gt;"
+                           onclick="ip.subnet_boundary_shift_right(),draw(ip)">
+                    <input type="button" name="subnet_type" value="&gt;&gt;"
+                           onclick="ip.subnet_boundary_far_right_shift(),draw(ip)">
+
+                </div>
+                <div>
+                    <label for="subnet_type"></label>
+                    <input type="button" name="subnet_type" value="&lt;&lt;"
+                           onclick="layout.moveClassBoundaryFurthermost(-1)">
+                    <input type="button" name="subnet_type" value="&lt;"
+                           onclick="layout.moveClassBoundary(-1)">
+                    <span>Provider Subnet</span>
+                    <input type="button" name="subnet_type" value=" &gt;"
+                           onclick="layout.moveClassBoundary()">
+                    <input type="button" name="subnet_type" value="&gt;&gt;"
+                           onclick="layout.moveClassBoundaryFurthermost()">
+                </div>
+            </menu>
         </div>
     </div>
 </div>

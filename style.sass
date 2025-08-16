@@ -38,18 +38,20 @@ html
 #ipv4
   span
     font-size: $SECTION-FONT
-    display: inline
+    display: inline-block
     height: 32px
     text-align: center
-    padding: 0 2.5px
+    //padding: 0 2.5px
+    min-width: 1em
 
-.ip_class_bits
+
+.class-bit
   @include bit-style(burlywood, lighter, darkmagenta)
 
-.subnet_bits
+.subnet-bit
   @include bit-style(red, light, lightgreen)
 
-.host_bits
+.host-bit
   @include bit-style(blueviolet, bold, gold)
 
 #subnet_mask

@@ -13,5 +13,6 @@ export const MIN_SUBNET_BIT_LEN = 2,
     DIRECTION = {
         LEFT: -1,
         RIGHT: 1
-    }
+    },
+    CLASS_LIST = ['class-bit', 'subnet-bit', 'host-bit']
 

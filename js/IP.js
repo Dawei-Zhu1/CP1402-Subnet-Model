@@ -101,9 +101,9 @@ export class IP {
             let formattedSeg = ''
             for (let bit of segment) {
                 formattedSeg += bit
-                if (bitCounter % CONST.OCTET_LEN === 7 && bitCounter < CONST.IP_END_POS) {
+             /*   if (bitCounter % CONST.OCTET_LEN === 7 && bitCounter < CONST.IP_END_POS) {
                     formattedSeg += '.'
-                }
+                }*/
                 bitCounter++
             }
             formattedIP.push(formattedSeg)
@@ -185,6 +185,13 @@ export class IP {
     getFormattedMaskSegments() {
         return this.getFormattedIPSegments(this.getSubnetMaskBin32())
     }
+    getFirstBinIpOfSubnet(){
+        return this.toBin32(this.getFirstSubnetIP())
+    }
+
+    getFormattedSubnetSegments(){
+        return this.getFormattedIPSegments(this.getFirstBinIpOfSubnet())
+    }
 
 
     setClassBoundary(pos) {
@@ -214,7 +221,6 @@ export class IP {
         for (let [index, ipOctet] of curIp.entries()) {
             result.push(ipOctet & mask[index])
         }
-        console.log(result)
         return result
     }
 

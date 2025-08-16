@@ -7,36 +7,60 @@ export class Layout {
         this.ip = ip
     }
 
-    // insert decimal ip into html
+    /*IP*/
+
+    // insert decimal IP into html
     displayDecimalIP() {
         for (let [index, octet] of this.ip.decimals.entries()) {
-            document.getElementById("ip_dec").getElementsByClassName("octet")[index].innerText = octet.toString()
+            document
+                .getElementById("ip_dec")
+                .getElementsByClassName("octet")[index].innerText = octet.toString()
         }
     }
 
     // insert binary ip into html
     displayBinaryIP() {
-        for (let [index, each_part] of this.ip.getFormattedIPSegments().entries()) {
-            document.getElementById("ip_bin").getElementsByClassName("segment")[index].innerText = each_part
+        /*Locate*/
+        let targetElement = document.querySelectorAll("#ip_bin .octet");
+        targetElement.forEach(element => {
+            element.innerHTML = ""
+        })
+        /*Initialise*/
+        let currentBitIndex = 0
+
+        for (let [index, eachPart] of this.ip.getFormattedIPSegments().entries()) {
+            let currentBitClass = CONST.CLASS_LIST[index]
+            for (let i of eachPart) {
+                let newElement = document.createElement("span")
+                let octetGroup = Math.floor(currentBitIndex / 8)
+                newElement.innerHTML = i
+                newElement.classList.add(currentBitClass, "bit")
+                targetElement[octetGroup].appendChild(newElement)
+                currentBitIndex++
+            }
         }
     }
 
     // This is for slash format.
     displaySlashMask() {
         for (let i = 0; i < document.getElementsByClassName("slashed_mask").length; i++) {
-            document.getElementsByClassName("slashed_mask")[i].innerText = '/' + this.ip.getSubnetBoundaryNotation().toString()
+            document
+                .getElementsByClassName("slashed_mask")[i].innerText = '/' + this.ip.getSubnetBoundaryNotation().toString()
         }
     }
 
     /* Mask */
     displayDecimalMask() {
-        document.getElementById("mask_dec").getElementsByTagName('span')[1].innerText = this.ip.getSubnetMask().join('.')
+        document
+            .getElementById("mask_dec")
+            .getElementsByTagName('span')[1].innerText = this.ip.getSubnetMask().join('.')
     }
 
     // Insert binary mask
     displayBinaryMask() {
         for (let [index, eachPart] of this.ip.getFormattedMaskSegments().entries()) {
-            document.getElementById("mask_bin").getElementsByClassName("segment")[index].innerText = eachPart
+            document.getElementById("mask_bin")
+                .getElementsByClassName("segment")[index].innerText = eachPart
         }
     }
 
@@ -44,12 +68,12 @@ export class Layout {
         document.getElementById('subnet_of_this_ip_dec').innerText = this.ip.getFirstSubnetIP().join('.')
     }
 
-    // // Display First Subnet address
-    // var first_subnet_bin = ip.provided_mask & ip.bin
-    // document.getElementById("first_subnet").innerText = bin_to_256nary(first_subnet_bin).join(".")
-    // // Last Subnet Addr
-    // let last_subnet_bin = first_subnet_bin + (2 ** ip.subnet_bits) << ip.host_bits >>> 0
-    // document.getElementById("last_subnet").innerText = bin_to_256nary(last_subnet_bin).join(".")
+    displayFirstBinarySubnet() {
+        for (let [index, segment] of this.ip.getFirstBinIpOfSubnet().entries()) {
+            document.getElementById('subnet_of_this_ip_bin')
+                .getElementsByClassName("segment")[index].innerText = segment
+        }
+    }
 
     // Update data
     updateSubnetCapacity() {
@@ -156,6 +180,7 @@ export class Layout {
         this.displayBinaryMask()
         // Subnet
         this.displayFirstSubnet()
+        // this.displayFirstBinarySubnet()
         // Data
         this.updateData()
     }
@@ -199,9 +224,16 @@ export class Layout {
         this.adjustIPValue(_incrementSet)
         this.refreshSubnetBoundary()
     }
-
 }
 
 function mod(n, m) {
     return ((n % m) + m) % m
+}
+
+function createElement(tagName, id, classList, content) {
+    let newElement = document.createElement(tagName)
+    newElement.innerHTML = content
+    classList && newElement.classList.add(classList)
+    id && (newElement.id = id)
+    return newElement
 }

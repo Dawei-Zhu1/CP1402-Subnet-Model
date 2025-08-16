@@ -1,20 +1,22 @@
 // script.js
 import {IP} from './IP.js';
 import {DIRECTION} from "./constants.js";
-
 import {Layout} from './layout.js'
 
 const ip = new IP()
 const layout = new Layout(ip);
+layout.displayBinaryIP()
 layout.refreshAll()
 
 document.addEventListener('keydown',
     (event) => {
         let keyName = event.key
         let keyCode = event.code
-        // event.preventDefault()
+        let kpc = event.charCode
+        event.preventDefault()
         // console.log(keyCode)
         // Ctrl/CMD + Key
+        console.log(`'${kpc}',`)
         if (event.ctrlKey || event.metaKey) {
             // switch (keyCode) {
             //     case 'ArrowUp':
