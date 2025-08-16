@@ -13,7 +13,7 @@ export class Layout {
     displayDecimalIP() {
         for (let [index, octet] of this.ip.decimals.entries()) {
             document
-                .getElementById("ip_dec")
+                .getElementById("dec-ip")
                 .getElementsByClassName("octet")[index].innerText = octet.toString()
         }
     }
@@ -21,10 +21,8 @@ export class Layout {
     // insert binary ip into html
     displayBinaryIP() {
         /*Locate*/
-        let targetElement = document.querySelectorAll("#ip_bin .octet");
-        targetElement.forEach(element => {
-            element.innerHTML = ""
-        })
+        let targetElement = document.querySelectorAll("#bin-ip .octet");
+        clearContentWithinClass(targetElement);
         /*Initialise*/
         let currentBitIndex = 0
 
@@ -52,15 +50,26 @@ export class Layout {
     /* Mask */
     displayDecimalMask() {
         document
-            .getElementById("mask_dec")
+            .getElementById("dec-mask")
             .getElementsByTagName('span')[1].innerText = this.ip.getSubnetMask().join('.')
     }
 
     // Insert binary mask
     displayBinaryMask() {
-        for (let [index, eachPart] of this.ip.getFormattedMaskSegments().entries()) {
-            document.getElementById("mask_bin")
-                .getElementsByClassName("segment")[index].innerText = eachPart
+        let targetElements = document.querySelectorAll("#bin-mask .octet");
+        clearContentWithinClass(targetElements)
+        /*Initialise*/
+        let currentBitIndex = 0
+        for (let [index, eachPart] of this.ip.getFormattedIPSegments().entries()) {
+            let currentBitClass = CONST.CLASS_LIST[index]
+            for (let i of eachPart) {
+                let newElement = document.createElement("span")
+                let octetGroup = Math.floor(currentBitIndex / 8)
+                newElement.innerHTML = i
+                newElement.classList.add(currentBitClass, "bit")
+                targetElements[octetGroup].appendChild(newElement)
+                currentBitIndex++
+            }
         }
     }
 
@@ -224,6 +233,12 @@ export class Layout {
         this.adjustIPValue(_incrementSet)
         this.refreshSubnetBoundary()
     }
+}
+
+function clearContentWithinClass(elements) {
+    elements.forEach(element => {
+        element.innerHTML = ""
+    })
 }
 
 function mod(n, m) {
